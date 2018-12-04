@@ -246,9 +246,9 @@ function disable_swap() {
 	fi
 	swff $swapp > /dev/null 2>&1;
 	setprop ro.config.zram false
-    setprop ro.config.zram.support true
-    setprop zram.disksize 0
-    sysctl vm.swappiness=0
+	setprop ro.config.zram.support false
+	setprop zram.disksize 0
+	sysctl vm.swappiness=0
 
 }
 
