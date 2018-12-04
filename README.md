@@ -2,7 +2,7 @@
 
 Legendary Kernel Tweaks
 
-High performance & power saving tweaks for all devices (that actually work)
+High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
 ### Features
@@ -64,7 +64,7 @@ Coolapk@yc9559
 ```
 ### Special Thanks
 @ahrion @Zackptg5 @topjohnwu
-[Unity Installee](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
+[Unity Installer](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
 [Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
 [Magisk](https://github.com/topjohnwu/Magisk)
 
