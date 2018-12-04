@@ -3,7 +3,7 @@
 # Codename: LKT
 # Author: korom42 @ XDA
 # Device: Universal
-# Version : 1.0
+# Version : 1.1
 # Last Update: 04.DEC.2018
 # ====================================================#
 # THE BEST BATTERY MOD YOU CAN EVER USE
