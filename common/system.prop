@@ -1,0 +1,48 @@
+#LKT™ - Begin
+ro.debuggable=0
+debug.atrace.tags.enableflags=0
+persist.sys.scrollingcache=3
+power.saving.mode=1
+ro.config.hw_power_saving=true
+persist.radio.add_power_save=1
+ro.fast.dormancy=0
+ro.config.hw_fast_dormancy=0
+ro.ril.fast.dormancy.rule=0
+ro.ril.disable.power.collapse=0 
+wifi.supplicant_scan_interval=180
+profiler.force_disable_ulog=true
+profiler.force_disable_err_rpt=true
+profiler.force_disable_ulog=1
+profiler.force_disable_err_rpt=1
+ro.config.nocheckin=1
+debugtool.anrhistory=0
+ro.com.google.locationfeatures=0
+ro.com.google.networklocation=0
+profiler.debugmonitor=false
+profiler.launch=false
+profiler.hung.dumpdobugreport=false
+persist.sys.purgeable_assets=1
+persist.service.pcsync.enable=0
+persist.service.lgospd.enable=0
+
+# Doze parameters
+pm.sleep_mode=1
+doze.pickup.vibration.threshold=2000
+doze.pulse.brightness=15
+doze.pulse.delay.in=200
+doze.pulse.duration.in=1000
+doze.pulse.duration.out=1000
+doze.pulse.duration.visible=5000
+doze.pulse.notifications=0
+doze.pulse.proxcheck=0
+doze.pulse.schedule=1s,10s,30s,60s,120s
+doze.pulse.schedule.resets=3
+doze.pulse.sigmotion=0
+doze.shake.acc.threshold=10
+doze.use.accelerometer=0
+doze.vibrate.sigmotion=0
+debug.doze.component=0
+
+# Set default power mode to low power for encoder
+vidc.debug.perf.mode=2
+#LKT™ - End

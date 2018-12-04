@@ -1,0 +1,7 @@
+id=legendary_kernel_tweaks
+name=LKT™
+version=v1.0
+versionCode=10
+author=korom42
+description=LKT will dynamically tweak your device for maximum power efficiency without deteriorating user experience.
+minMagisk=14000
