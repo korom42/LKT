@@ -750,7 +750,7 @@ fi
 	fi
 
     if [ $PROFILE -eq 1 ];then
-    case ${SOC,,} in
+    case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
 
 	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
@@ -1045,7 +1045,7 @@ fi
 
     esac
 
-    case ${SOC,,} in
+    case "$SOC" in
     "moorefield") # Intel Atom
     set_param cpu0 above_hispeed_delay "58000"
 	set_param cpu0 hispeed_freq 1480000
@@ -1058,7 +1058,7 @@ fi
  
     else
 
-    case ${SOC,,} in
+    case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
 
 	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
@@ -1377,7 +1377,7 @@ fi
 
     esac
 
-    case ${SOC,,} in
+    case "$SOC" in
     "moorefield") # Intel ATOM
     set_param cpu0 above_hispeed_delay "58000"
 	set_param cpu0 hispeed_freq 1480000
