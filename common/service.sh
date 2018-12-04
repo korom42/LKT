@@ -141,7 +141,8 @@ function set_io() {
     ROM=`getprop ro.build.display.id`
     KERNEL="$(uname -r)"
     APP=`getprop ro.product.model`
-    SOC=`getprop ro.product.board`
+    sSOC=`getprop ro.product.board`
+    SOC=$(echo "$sSOC" | tr '[:upper:]' '[:lower:]')
     cores=`grep -c ^processor /proc/cpuinfo`
     coresmax=$(cat /sys/devices/system/cpu/kernel_max)
 
