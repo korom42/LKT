@@ -1760,10 +1760,11 @@ su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$SecretCodeRe
 # CLEAN UP
 # =========
 
+# Search all subdirectories
 
 for f in $(find /cache -name '*.apk' -or -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.txt' -or -name '*.0'); do rm $f; done
 for f in $(find /data -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do rm $f; done
-for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.txt' -or -name '*.0'); do rm $f; done
+for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do rm $f; done
 
 
 logdata "#  Clean-up = Executed" 
