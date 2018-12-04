@@ -47,7 +47,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 
 ## Authors
 
-**Omar Koulache** - *Initial work* - [korom42](https://github.com/korom42)
+**Omar Koulache** - [korom42](https://github.com/korom42)
 
 ## Credits
 
@@ -63,8 +63,10 @@ Coolapk@yc9559
 @ZeroKool76 @ZeroInfinity
 ```
 ### Special Thanks
-ahrion & Zackptg5 - Providing the Unity Installer (https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) and Vol Key Input Code (https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
-topjohnwu - Providing us with Magisk (https://github.com/topjohnwu/Magisk)
+@ahrion @Zackptg5 @topjohnwu
+[Unity Installee](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
+[Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
+[Magisk](https://github.com/topjohnwu/Magisk)
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 
