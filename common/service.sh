@@ -602,7 +602,7 @@ fi
 	write /proc/sys/kernel/sched_initial_task_util 0
 
 	sleep 0.1
-	2000
+	
 	write $GLD/schedutil/up_rate_limit_us 1000
 	write $GLD/schedutil/down_rate_limit_us 8000
 	write $GLD/schedutil/iowait_boost_enable 0
@@ -722,6 +722,17 @@ fi
 	
 	# Input Boost
 	if [ -e "/sys/module/cpu_boost/parameters/input_boost_freq" ]; then
+	if [ $coresmax -eq 1 ];then
+	set_value "0:0 1:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	elif [ $coresmax -eq 3 ];then
+	set_value "0:0 1:0 2:0 3:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	elif [ $coresmax -eq 5 ];then
+	set_value "0:0 1:0 2:0 3:0 4:0 5:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	elif [ $coresmax -eq 7 ];then
+	set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	elif [ $coresmax -eq 9 ];then
+	set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	fi
 	set_value 20 /sys/module/cpu_boost/parameters/input_boost_ms
 	else
 	logdata "#  *WARNING* Your Kernel does not support CPU BOOST  " 
