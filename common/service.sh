@@ -273,66 +273,6 @@ fi;
 
 function RAM_tuning() { 
 
-    SWAP_ENABLE_THRESHOLD=1572864
-
-    # Enable swap only for 1.5 GB targets
-    if [ "$TOTAL_RAM" -le "$SWAP_ENABLE_THRESHOLD" ]; then
-        # Static swiftness
-        echo 1 > /proc/sys/vm/swap_ratio_enable
-        echo 70 > /proc/sys/vm/swap_ratio
-
-        # Swap disk - 200MB size
-        if [ ! -f /data/system/swap/swapfile ]; then
-            dd if=/dev/zero of=/data/system/swap/swapfile bs=1m count=200
-        fi
-        mkswap /data/system/swap/swapfile
-        swapon /data/system/swap/swapfile -p 32758
-		
-		if [ -e /sys/block/zram0/reset ]; then
-        echo "1" > /sys/block/zram0/reset;
-        echo 209715200 > /sys/block/zram0/disksize
-        mkswap /dev/block/zram0 > /dev/null 2>&1;
-        swapon /dev/block/zram0 > /dev/null 2>&1;
-        fi;
-
-  
-        if [ -e /sys/block/zram1/reset ]; then
-        echo "1" > /sys/block/zram1/reset;
-        echo 209715200 > /sys/block/zram1/disksize
-        mkswap /dev/block/zram1 > /dev/null 2>&1;
-        swapon /dev/block/zram1 > /dev/null 2>&1;
-        fi;
-        setprop ro.config.zram true
-        setprop ro.config.zram.support true
-        setprop zram.disksize 209715200
- 
-   if [ -e /sys/block/zram0/comp_algorithm ]; then
-    echo "lz4" > /sys/block/zram0/comp_algorithm
-   fi;
-    
-   if [ -e /sys/block/zram0/max_comp_streams ]; then
-    echo "4" > /sys/block/zram0/max_comp_streams
-   fi;
-   
-   sysctl vm.swappiness=30
-
-  if [ -e /sys/module/zswap/parameters/enabled]; then
-   if [ -e /sys/module/zswap/parameters/enabled]; then
-   echo "1" > /sys/module/zswap/parameters/enabled
-   fi;
-   if [ -e /sys/module/zswap/parameters/compressor ]; then
-   echo "lz4" > /sys/module/zswap/parameters/compressor
-   fi;
-   if [ -e /sys/module/zswap/parameters/max_pool_percent ]; then
-   echo "30" > /sys/module/zswap/parameters/max_pool_percent
-   fi;
-   if [ -e /sys/module/zswap/parameters/zpool ]; then
-   echo "z3fold" > /sys/module/zswap/parameters/zpool
-   fi;
-  fi;
-  
- fi
-
   # LMK Calculator
   # This is a Calculator for the Android Low Memory Killer 
   # It detects the Free RAM and set the LMK to right configuration
