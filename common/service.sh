@@ -258,7 +258,7 @@ function disable_swap() {
 	setprop ro.config.zram.support false
 	setprop zram.disksize 0
 	set_value 0 /proc/sys/vm/swappiness
-	sysctl -w -w vm.swappiness=0
+	sysctl -w vm.swappiness=0
 }
 
 function disable_lmk() {
@@ -372,28 +372,28 @@ fi
 # =========
 
 chmod 0644 /proc/sys/*;
-sysctl -w -w vm.drop_caches=1
-sysctl -w -w vm.oom_dump_tasks=1
-sysctl -w -w vm.oom_kill_allocating_task=0
-sysctl -w -w vm.dirty_background_ratio=1
-sysctl -w -w vm.dirty_ratio=5
-sysctl -w -w vm.vfs_cache_pressure=30
-#sysctl -w -w vm.overcommit_memory=50
-#sysctl -w -w vm.overcommit_ratio=0
-sysctl -w -w vm.laptop_mode=0
-sysctl -w -w vm.block_dump=0
-sysctl -w -w vm.dirty_writeback_centisecs=0
-sysctl -w -w vm.dirty_expire_centisecs=0
-sysctl -w -w dir-notify-enable=0
-sysctl -w -w fs.lease-break-time=20
-sysctl -w -w fs.leases-enable=1
-sysctl -w -w vm.compact_memory=1
-sysctl -w -w vm.compact_unevictable_allowed=1
-sysctl -w -w vm.page-cluster=1
-#sysctl -w -w vm.extfrag_threshold=500
-#sysctl -w -w vm.watermark_scale_factor=10
-#sysctl -w -w stat_interval=1200
-sysctl -w -w vm.panic_on_oom=0
+sysctl -w vm.drop_caches=1
+sysctl -w vm.oom_dump_tasks=1
+sysctl -w vm.oom_kill_allocating_task=0
+sysctl -w vm.dirty_background_ratio=1
+sysctl -w vm.dirty_ratio=5
+sysctl -w vm.vfs_cache_pressure=30
+#sysctl -w vm.overcommit_memory=50
+#sysctl -w vm.overcommit_ratio=0
+sysctl -w vm.laptop_mode=0
+sysctl -w vm.block_dump=0
+sysctl -w vm.dirty_writeback_centisecs=0
+sysctl -w vm.dirty_expire_centisecs=0
+sysctl -w dir-notify-enable=0
+sysctl -w fs.lease-break-time=20
+sysctl -w fs.leases-enable=1
+sysctl -w vm.compact_memory=1
+sysctl -w vm.compact_unevictable_allowed=1
+sysctl -w vm.page-cluster=1
+#sysctl -w vm.extfrag_threshold=500
+#sysctl -w vm.watermark_scale_factor=10
+#sysctl -w stat_interval=1200
+sysctl -w vm.panic_on_oom=0
 
 # =========
 # Entropy 
@@ -404,8 +404,8 @@ sysctl -w -w vm.panic_on_oom=0
 # It will increase battery drain
 # So leave it as it is
 
-sysctl -w -w kernel.random.read_wakeup_threshold=64
-sysctl -w -w kernel.random.write_wakeup_threshold=128
+sysctl -w kernel.random.read_wakeup_threshold=64
+sysctl -w kernel.random.write_wakeup_threshold=128
 
 logdata "#  Virtual Memory Tweaks = Activated" 
 
@@ -1396,8 +1396,8 @@ set_value 0 /sys/module/binder/parameters/debug_mask
 set_value 0 /sys/devices/system/edac/cpu/log_ce
 set_value 0 /sys/devices/system/edac/cpu/log_ue
 
-sysctl -w -w kernel.panic_on_oops=0
-sysctl -w -w kernel.panic=0
+sysctl -w kernel.panic_on_oops=0
+sysctl -w kernel.panic=0
 
 for i in $( find /sys/ -name debug_mask); do
  write $i 0;
