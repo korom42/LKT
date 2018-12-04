@@ -258,7 +258,7 @@ function disable_swap() {
 	setprop ro.config.zram.support false
 	setprop zram.disksize 0
 	set_value 0 /proc/sys/vm/swappiness
-	sysctl vm.swappiness=0
+	sysctl -w -w vm.swappiness=0
 }
 
 function disable_lmk() {
@@ -372,28 +372,28 @@ fi
 # =========
 
 chmod 0644 /proc/sys/*;
-sysctl vm.drop_caches=1
-sysctl vm.oom_dump_tasks=1
-sysctl vm.oom_kill_allocating_task=0
-sysctl vm.dirty_background_ratio=1
-sysctl vm.dirty_ratio=5
-sysctl vm.vfs_cache_pressure=30
-sysctl vm.overcommit_memory=50
-sysctl vm.overcommit_ratio=0
-sysctl vm.laptop_mode=0
-sysctl vm.block_dump=0
-sysctl vm.dirty_writeback_centisecs=0
-sysctl vm.dirty_expire_centisecs=0
-sysctl dir-notify-enable=0
-sysctl fs.lease-break-time=20
-sysctl fs.leases-enable=1
-sysctl vm.compact_memory=1
-sysctl vm.compact_unevictable_allowed=1
-sysctl vm.page-cluster=1
-#sysctl vm.extfrag_threshold=500
-#sysctl vm.watermark_scale_factor=10
-#sysctl stat_interval=1200
-sysctl vm.panic_on_oom=0
+sysctl -w -w vm.drop_caches=1
+sysctl -w -w vm.oom_dump_tasks=1
+sysctl -w -w vm.oom_kill_allocating_task=0
+sysctl -w -w vm.dirty_background_ratio=1
+sysctl -w -w vm.dirty_ratio=5
+sysctl -w -w vm.vfs_cache_pressure=30
+#sysctl -w -w vm.overcommit_memory=50
+#sysctl -w -w vm.overcommit_ratio=0
+sysctl -w -w vm.laptop_mode=0
+sysctl -w -w vm.block_dump=0
+sysctl -w -w vm.dirty_writeback_centisecs=0
+sysctl -w -w vm.dirty_expire_centisecs=0
+sysctl -w -w dir-notify-enable=0
+sysctl -w -w fs.lease-break-time=20
+sysctl -w -w fs.leases-enable=1
+sysctl -w -w vm.compact_memory=1
+sysctl -w -w vm.compact_unevictable_allowed=1
+sysctl -w -w vm.page-cluster=1
+#sysctl -w -w vm.extfrag_threshold=500
+#sysctl -w -w vm.watermark_scale_factor=10
+#sysctl -w -w stat_interval=1200
+sysctl -w -w vm.panic_on_oom=0
 
 # =========
 # Entropy 
@@ -404,8 +404,8 @@ sysctl vm.panic_on_oom=0
 # It will increase battery drain
 # So leave it as it is
 
-sysctl kernel.random.read_wakeup_threshold=64
-sysctl kernel.random.write_wakeup_threshold=128
+sysctl -w -w kernel.random.read_wakeup_threshold=64
+sysctl -w -w kernel.random.write_wakeup_threshold=128
 
 logdata "#  Virtual Memory Tweaks = Activated" 
 
@@ -640,7 +640,7 @@ fi
 	set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	set_value "interactive" /sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_governor
 	
-    chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
+        chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
 	chown 0.0 /sys/devices/system/cpu/cpu$bcores/cpufreq/interactive/*
 	chmod 0666 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
 	chmod 0666 /sys/devices/system/cpu/cpu$bcores/cpufreq/interactive/*
@@ -693,13 +693,6 @@ fi
     if [ $PROFILE -eq 1 ];then
     case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
-
-	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
-	echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster
-	echo 4 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
 	
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
 	set_param cpu0 hispeed_freq 1180000
@@ -714,43 +707,6 @@ fi
 
 	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
 	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
-	
-	for cpubw in /sys/class/devfreq/*qcom,cpubw* ; do
-    write $cpubw/governor "bw_hwmon"
-    write $cpubw/polling_interval 50
-    write $cpubw/min_freq 1525
-    write $cpubw/bw_hwmon/mbps_zones "3143 5859 11863 13763"
-    write $cpubw/bw_hwmon/sample_ms 4
-    write $cpubw/bw_hwmon/io_percent 34
-    write $cpubw/bw_hwmon/hist_memory 20
-    write $cpubw/bw_hwmon/hyst_length 10
-    write $cpubw/bw_hwmon/low_power_ceil_mbps 0
-    write $cpubw/bw_hwmon/low_power_io_percent 34
-    write $cpubw/bw_hwmon/low_power_delay 20
-    write $cpubw/bw_hwmon/guard_band_mbps 0
-    write $cpubw/bw_hwmon/up_scale 250
-    write $cpubw/bw_hwmon/idle_mbps 1600
-	done
-	for memlat in /sys/class/devfreq/*qcom,memlat-cpu* ; do
-    write $memlat/governor "mem_latency"
-    write $memlat/polling_interval 10
-    write $memlat/mem_latency/ratio_ceil 400
-	done
-
-    write /sys/class/devfreq/soc:qcom,mincpubw/governor "cpufreq"
-	write /sys/module/lpm_levels/system/pwr/cpu0/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu1/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu2/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu3/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu4/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu5/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu6/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu7/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/pwr-l2-dynret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/pwr-l2-ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/perf-l2-dynret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled N
-	write /sys/module/lpm_levels/parameters/sleep_disabled N
 
 	echo 0-3 > /dev/cpuset/background/cpus
 	echo 0-3 > /dev/cpuset/system-background/cpus
@@ -801,7 +757,7 @@ fi
 	
     ;;
 
-    "msm8974" | "APQ8084")  #sd800-801-805
+    "msm8974" | "apq8084")  #sd800-801-805
 	
 	set_param cpu0 above_hispeed_delay "18000 1480000:78000 1780000:138000"
 	set_param cpu0 hispeed_freq 1180000
@@ -949,7 +905,7 @@ fi
     ;;
 
 	
-	"MT6797T" | "MT6797" | "mt6797T" | "mt6797") #Helio X25 / X20	 
+	"mt6797t" | "mt6797") #Helio X25 / X20	 
 	set_value 50 /proc/hps/down_threshold
 	set_value 80 /proc/hps/up_threshold
 	set_value "3 2 0" /proc/hps/num_base_perf_serv
@@ -961,7 +917,7 @@ fi
 	set_param cpu0 min_sample_time 18000
     ;;
 	
-	"MT6795" | "mt6795") #Helio X10
+	"mt6795") #Helio X10
 	set_value 50 /proc/hps/down_threshold
 	set_value 85 /proc/hps/up_threshold
 	set_value 2 /proc/hps/num_base_perf_serv
@@ -1002,13 +958,6 @@ fi
     case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
 
-	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
-	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
-	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
-	echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster
-	echo 4 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
-
 	# configure governor settings for little cluster
 	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
@@ -1018,53 +967,14 @@ fi
 	set_param cpu0 min_sample_time 18000
 
 	# configure governor settings for big cluster
-    set_param cpu4 above_hispeed_delay "18000 1380000:78000 1480000:18000 1580000:98000 1880000:138000"
+        set_param cpu4 above_hispeed_delay "18000 1380000:78000 1480000:18000 1580000:98000 1880000:138000"
 	set_param cpu4 hispeed_freq 1280000
 	set_param cpu4 go_hispeed_load 98
 	set_param cpu4 target_loads "80 380000:39 580000:58 780000:63 980000:81 1080000:92 1180000:77 1280000:98 1380000:86 1580000:98"
 	set_param cpu4 min_sample_time 18000
 
-
 	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
 	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
-	
-		
-	for cpubw in /sys/class/devfreq/*qcom,cpubw* ; do
-    write $cpubw/governor "bw_hwmon"
-    write $cpubw/polling_interval 50
-    write $cpubw/min_freq 1525
-    write $cpubw/bw_hwmon/mbps_zones "3143 5859 11863 13763"
-    write $cpubw/bw_hwmon/sample_ms 4
-    write $cpubw/bw_hwmon/io_percent 34
-    write $cpubw/bw_hwmon/hist_memory 20
-    write $cpubw/bw_hwmon/hyst_length 10
-    write $cpubw/bw_hwmon/low_power_ceil_mbps 0
-    write $cpubw/bw_hwmon/low_power_io_percent 34
-    write $cpubw/bw_hwmon/low_power_delay 20
-    write $cpubw/bw_hwmon/guard_band_mbps 0
-    write $cpubw/bw_hwmon/up_scale 250
-    write $cpubw/bw_hwmon/idle_mbps 1600
-    done
-    for memlat in /sys/class/devfreq/*qcom,memlat-cpu* ; do
-    write $memlat/governor "mem_latency"
-    write $memlat/polling_interval 10
-    write $memlat/mem_latency/ratio_ceil 400
-    done
-
-    write /sys/class/devfreq/soc:qcom,mincpubw/governor "cpufreq"
-	write /sys/module/lpm_levels/system/pwr/cpu0/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu1/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu2/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/cpu3/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu4/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu5/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu6/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/cpu7/ret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/pwr-l2-dynret/idle_enabled N
-	write /sys/module/lpm_levels/system/pwr/pwr-l2-ret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/perf-l2-dynret/idle_enabled N
-	write /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled N
-	write /sys/module/lpm_levels/parameters/sleep_disabled N
 
 	echo 0-3 > /dev/cpuset/background/cpus
 	echo 0-3 > /dev/cpuset/system-background/cpus
@@ -1115,7 +1025,7 @@ fi
 	
     ;;
 
-    "msm8974" | "APQ8084")
+    "msm8974" | "apq8084")
 	
 	setprop ro.qualcomm.perf.cores_online 2
 	set_param cpu0 above_hispeed_delay "18000 1480000:78000 1780000:138000"
@@ -1274,7 +1184,7 @@ fi
     ;;
 
 	
-	"MT6797T" | "MT6797" | "mt6797T" | "mt6797") #Helio X25 / X20	 
+	"mt6797t" | "mt6797") #Helio X25 / X20	 
 	set_value 60 /proc/hps/down_threshold
 	set_param cpu0 io_is_busy 0
 	
@@ -1290,7 +1200,7 @@ fi
     ;;
 
 	
-	"MT6795" | "mt6795") #Helio X10
+       "mt6795") #Helio X10
 	
 	set_value 60 /proc/hps/down_threshold
 	set_param cpu0 io_is_busy 0
@@ -1411,9 +1321,9 @@ write /proc/sys/kernel/sched_freq_inc_notify 3000000
 #	if [ -e "/sys/devices/system/cpu/cpu0/cpufreq/interactive/screen_off_maxfreq" ]; then
 #		set_param cpu0 screen_off_maxfreq 307200
 #	fi
-#	if [ -e "/sys/devices/system/cpu/cpu0/cpufreq/interactive/powersave_bias" ]; then
+	if [ -e "/sys/devices/system/cpu/cpu0/cpufreq/interactive/powersave_bias" ]; then
 		set_param cpu0 powersave_bias 1
-#	fi
+	fi
 
 }
 
@@ -1430,7 +1340,7 @@ CPU_tuning
  logdata "#  Governor Tweaks = Activated" 
 
  # set GPU default power level to 6 instead of 4 or 5
- set_value /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
+ # set_value /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
 	
  if [ -e "/sys/module/adreno_idler" ]; then
 	write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
@@ -1486,8 +1396,8 @@ set_value 0 /sys/module/binder/parameters/debug_mask
 set_value 0 /sys/devices/system/edac/cpu/log_ce
 set_value 0 /sys/devices/system/edac/cpu/log_ue
 
-sysctl kernel.panic_on_oops=0
-sysctl kernel.panic=0
+sysctl -w -w kernel.panic_on_oops=0
+sysctl -w -w kernel.panic=0
 
 for i in $( find /sys/ -name debug_mask); do
  write $i 0;
