@@ -233,23 +233,31 @@ fi
 }
 
 function disable_swap() {
-
 	swapp=`blkid | grep swap | awk '{print $1}'`; 
-	if [ -e /sys/block/zram0/reset ]; then
-	echo "1" > /sys/block/zram0/reset;
-	echo 0 > /sys/block/zram0/disksize
-	swff /dev/block/zram0 > /dev/null 2>&1;
-	elif [ -e /sys/block/zram1/reset ]; then
-	echo "1" > /sys/block/zram1/reset;
-	echo 0 > /sys/block/zram1/disksize
-	swff /dev/block/zram1 > /dev/null 2>&1;
+	if [ -f /system/bin/swapoff ] ; then
+    swff="/system/bin/swapoff"
+	else
+	swff="swapoff"
 	fi
+	
 	swff $swapp > /dev/null 2>&1;
+
+	for i in /sys/block/zram*; do
+	set_value "1" $i/reset;
+	set_value "0" $i/disksize
+	done
+
+	for j in /sys/block/vnswap*; do
+	set_value "1" $j/reset;
+	set_value "0" $j/disksize
+	done
+
+	setprop vnswap.enabled false
 	setprop ro.config.zram false
 	setprop ro.config.zram.support false
 	setprop zram.disksize 0
+	set_value 0 /proc/sys/vm/swappiness
 	sysctl vm.swappiness=0
-
 }
 
 function disable_lmk() {
@@ -293,9 +301,9 @@ function RAM_tuning() {
         mkswap /dev/block/zram1 > /dev/null 2>&1;
         swapon /dev/block/zram1 > /dev/null 2>&1;
         fi;
-   setprop ro.config.zram true
-   setprop ro.config.zram.support true
-   setprop zram.disksize 209715200
+        setprop ro.config.zram true
+        setprop ro.config.zram.support true
+        setprop zram.disksize 209715200
  
    if [ -e /sys/block/zram0/comp_algorithm ]; then
     echo "lz4" > /sys/block/zram0/comp_algorithm
