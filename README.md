@@ -2,7 +2,7 @@
 
 Legendary Kernel Tweaks
 
-High performance & power savig tweaks for all devices (that actually work)
+High performance & power saving tweaks for all devices (that actually work)
 
 ## Getting Started
 ### Features
