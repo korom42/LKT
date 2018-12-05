@@ -9,14 +9,9 @@ High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for 24 different SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices.
 
 ### Features
-```
-• Dynamic CPU tuning
-• Dynamic RAM tuning
-• GPU tuning
-• TCP tuning
-• I/O tuning
-• Doze & deepsleep optimisations
-```
+LKT aims to achieve the **balance** between **power consumption** and **performance**.
+Compared to tuning the parameters manually, LKT uses Project WIPE excellent open source parameters that can adapt to multiple styles of workload sequences and produce a suitable combination of parameters for almost all mainstream SOCs.
+This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules**, to unify the rest of the parameters for a more consistent experience. Now it also includes EAS parameters for devices with "sched" or "schedutil" governors. 
 
 ### Prerequisites
 
@@ -50,7 +45,7 @@ Kirin 960 (HUAWEI)
 Kirin 970 (HUAWEI)
 Google Pixel & EAS phones
 ```
-Please note that even if your device isn't listed some tweaks will stil apply
+Please note that even if your device isn't listed some parameters will stil apply
 
 ### Installing
 
@@ -80,7 +75,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 
 ### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
 ```
-Coolapk@yc9559
+@yc9559
 ```
 ### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
