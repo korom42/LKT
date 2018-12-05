@@ -230,7 +230,7 @@ fi
 
 function disable_swap() {
 	swapp=`blkid | grep swap | awk '{print $1}'`;
-        uuid=`blkid -s UUID -o value /dev/block/sda4 | awk '{print $1}'`; 
+        uuid=`blkid -s UUID -o value $swapp | awk '{print $1}'`; 
 
 
 	if [ -f /system/bin/swapoff ] ; then
@@ -251,7 +251,7 @@ function disable_swap() {
 	set_value "0" $j/disksize
 	done
 
-	for k in /dev/block/vnswap*; do
+	for k in /sys/block/vnswap*; do
 	set_value "1" $k/reset;
 	set_value "0" $k/disksize
 	done
