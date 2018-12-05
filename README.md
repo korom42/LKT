@@ -78,18 +78,18 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 
 ## Credits
 
-### [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
+### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
 ```
 Coolapk@yc9559
 ```
-### [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
+### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
 @Alcolawl @soniCron @Asiier @Freak07 @Mostafa Wael 
 @Senthil360 @TotallyAnxious @RenderBroken @adanteon  
 @Kyuubi10 @ivicask @RogerF81 @joshuous @boyd95 
 @ZeroKool76 @ZeroInfinity
 ```
-### Special Thanks
+### • Special Thanks
 @ahrion @Zackptg5 @topjohnwu
 [Unity Installer](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
 [Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
@@ -98,10 +98,9 @@ Coolapk@yc9559
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 
 ## Support
-[SUPPORT THE DEVELOPMENT](http://buymeacoff.ee/5j9fqFgYU)
+[SUPPORT THE DEVELOPMENT](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
 
-* [![XDA Forum thread](https://img.shields.io/badge/XDA-Portal-orange.svg)](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688/)
-* [![Source Code](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
+* [![Github](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
 * [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 * [![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
 
