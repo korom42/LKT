@@ -5,11 +5,8 @@ Legendary Kernel Tweaks
 High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
-At first sight you might this another BS tweaks collection .. Well then think twice
-But most universal mods are placebo or barely change something .. Right ?
-Actually I agree with that It's true but, what makes LKT special is being universal and device specific at the same time
-Let me explain .. Using very simple functions LKT detects what SoC your device have and then it applies the correspending tweaks 
-This would not be possoble without Project WIPE contributors who provided us with interactive governor configs for 24 diffrent SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices
+### Why LKT ?
+LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for 24 different SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices.
 
 ### Features
 ```
@@ -81,18 +78,18 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 
 ## Credits
 
-### [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
+### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
 ```
 Coolapk@yc9559
 ```
-### [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
+### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
 @Alcolawl @soniCron @Asiier @Freak07 @Mostafa Wael 
 @Senthil360 @TotallyAnxious @RenderBroken @adanteon  
 @Kyuubi10 @ivicask @RogerF81 @joshuous @boyd95 
 @ZeroKool76 @ZeroInfinity
 ```
-### Special Thanks
+### • Special Thanks
 @ahrion @Zackptg5 @topjohnwu
 [Unity Installer](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
 [Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
@@ -101,17 +98,17 @@ Coolapk@yc9559
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 
 ## Support
-[SUPPORT THE DEVELOPMENT](http://buymeacoff.ee/5j9fqFgYU)
+[SUPPORT THE DEVELOPMENT](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
 
-* [![LICENSE](https://img.shields.io/github/license/Magisk-Modules-Repo/Pix3lify.svg)](https://github.com)
-* [![XDA Forum thread](https://img.shields.io/badge/XDA-Portal-orange.svg)](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688/)
-* [![Source Code](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
+* [![Github](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
+* [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+* [![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
 
 ---
 <div align="center">
   <h2>This is the best so so far !</h2>
 </div>
 
-<p align="center"><sub>A project by <a href="https://xda.com" target="_blank">korom42</a> with ❤<p>
+<p align="center"><sub>A project by <a href="https://forum.xda-developers.com/member.php?u=5033594" target="_blank">korom42</a> with ❤<p>
 
 <p align="center"><a href="https://saythanks.io/to/korom42" target="_blank"><img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg?longCache=true&style=flat-square"></a><p>
