@@ -75,7 +75,19 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 
 ### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
 ```
-@yc9559
+ @yc9559 @Fdss45 @yy688go (好像不见了) @Jouiz @lmentor
+ @小方叔叔 @星辰紫光 @ℳ๓叶落情殇 @屁屁痒 @发热不卡算我输 @予北 
+ @選擇遺忘 @想飞的小伙 @白而出清 @AshLight @微风阵阵 @半阳半
+ @AhZHI @悲欢余生有人听 @YaomiHwang @花生味 @胡同口卖菜的
+ @gce8980 @vesakam @q1006237211 @Runds @lpc3123191239 
+ @萝莉控の胜利 @iMeaCore @Dfift半島鐵盒 @wenjiahong @星空未来
+ @水瓶 @瓜瓜皮 @默认用户名8 @影灬无神 @橘猫520 @此用户名已存在
+ @ピロちゃん @Jaceﮥ @黑白颠倒的年华0 @九日不能贱 @fineable
+ @哑剧 @zokkkk @永恒的丶齿轮 @L风云 @Immature_H @揪你鸡儿
+ @xujiyuan723 @Ace蒙奇 @ちぃ @木子茶i同学 @HEX_Stan @微风阵阵
+ @_暗香浮动月黄昏 @子喜 @ft1858336 @xxxxuanran @Scorpiring
+ @猫见 @僞裝灬 @请叫我芦柑 @吃瓜子的小白 @HELISIGN @鹰雏
+ @贫家boy有何贵干 @Yoooooo
 ```
 ### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
