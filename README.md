@@ -71,8 +71,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 **Omar Koulache** - [korom42](https://github.com/korom42)
 
 ## Credits
-
-### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
+### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
 ```
  @yc9559 @Fdss45 @yy688go (好像不见了) @Jouiz @lmentor
  @小方叔叔 @星辰紫光 @ℳ๓叶落情殇 @屁屁痒 @发热不卡算我输 @予北 
@@ -96,10 +95,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 @ZeroKool76 @ZeroInfinity
 ```
 ### • Special Thanks
-@ahrion @Zackptg5 @topjohnwu
-[Unity Installer](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
-[Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
-[Magisk](https://github.com/topjohnwu/Magisk)
+@ahrion @Zackptg5 @topjohnwu for making this possible.
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 
