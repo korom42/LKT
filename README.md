@@ -5,6 +5,12 @@ Legendary Kernel Tweaks
 High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
+At first sight you might this another BS tweaks collection .. Well then think twice
+But most universal mods are placebo or barely change something .. Right ?
+Actually I agree with that It's true but, what makes LKT special is being universal and device specific at the same time
+Let me explain .. Using very simple functions LKT detects what SoC your device have and then it applies the correspending tweaks 
+This would not be possoble without Project WIPE contributors who provided us with interactive governor configs for 24 diffrent SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices
+
 ### Features
 ```
 • Dynamic CPU tuning
@@ -22,8 +28,32 @@ What you will need
 ```
 • An android device
 • Magisk 14+
-• Busybox is preferred
+• Busybox
 ```
+
+### Compability
+
+Every device with the following chipsets
+```
+Snapdragon 625-626
+Snapdragon 636
+Snapdragon 652-650
+Snapdragon 660
+Snapdragon 801-800-805
+Snapdragon 810-808
+Snapdragon 820-821
+Snapdragon 835
+Exynos 7420 (Samsung)
+Exynos 8890 (Samsung)
+Exynos 8895 (Samsung)
+Helio x10 (MEDIATEK)
+Helio x20-x25 (MEDIATEK)
+Kirin 950-955 (HUAWEI)
+Kirin 960 (HUAWEI)
+Kirin 970 (HUAWEI)
+Google Pixel & EAS phones
+```
+Please note that even if your device isn't listed some tweaks will stil apply
 
 ### Installing
 
@@ -74,7 +104,7 @@ See also the list of [contributors](https://github.com/korom42/LKT/contributors)
 [SUPPORT THE DEVELOPMENT](http://buymeacoff.ee/5j9fqFgYU)
 
 * [![LICENSE](https://img.shields.io/github/license/Magisk-Modules-Repo/Pix3lify.svg)](https://github.com)
-* [![LKT XDA Portal feature](https://img.shields.io/badge/XDA-Portal-orange.svg)](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688/)
+* [![XDA Forum thread](https://img.shields.io/badge/XDA-Portal-orange.svg)](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688/)
 * [![Source Code](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
 
 ---

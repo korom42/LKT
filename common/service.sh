@@ -3,8 +3,8 @@
 # Codename: LKT
 # Author: korom42 @ XDA
 # Device: Universal
-# Version : 1.1
-# Last Update: 04.DEC.2018
+# Version : 1.2
+# Last Update: 05.DEC.2018
 # ====================================================#
 # THE BEST BATTERY MOD YOU CAN EVER USE
 # JUST FLASH AND FORGET
@@ -18,7 +18,7 @@
 # @ZeroKool76 @ZeroInfinity
 #
 # ** Project WIPE contributors **
-# @Fdss45 @yy688go (好像不见了) @Jouiz @lpc3123191239
+# @yc9559 @Fdss45 @yy688go (好像不见了) @Jouiz @lpc3123191239
 # @小方叔叔 @星辰紫光 @ℳ๓叶落情殇 @屁屁痒 @发热不卡算我输# @予北
 # @選擇遺忘 @想飞的小伙 @白而出清 @AshLight @微风阵阵 @半阳半
 # @AhZHI @悲欢余生有人听 @YaomiHwang @花生味 @胡同口卖菜的
@@ -34,12 +34,7 @@
 #
 # Give proper credits when using this in your work
 # ====================================================#
-# I spend a lot of time in making and testing these 
-# tweaks so feel free to donate to me and anyone who
-# contributed to this work
-# Contact Email = korom42@gmail.com
-# Paypal Email = koulache@hotmail.de
-# ====================================================#
+
 
 # helper functions to allow Android init like script
 function write() {
@@ -115,10 +110,10 @@ function set_io() {
     # Do not decrease
     # Better late than never
 
-    sleep 40
+    sleep 48
 
     #MOD Variable
-    V="1.0"
+    V="1.2"
     PROFILE=<PROFILE_MODE>
     LOG=/data/LKT.prop
     sDATE=`date +%Y.%m.%d-%H.%M`
@@ -215,7 +210,7 @@ logdata "#  Android : $(getprop ro.build.version.release)"
 logdata "#  Kernel : $KERNEL" 
 logdata "#  BusyBox  : $sbusybox" 
 logdata "# ==============================" 
-logdata "" 
+
 
 function enable_bcl() {
 
@@ -234,14 +229,17 @@ fi
 }
 
 function disable_swap() {
-	swapp=`blkid | grep swap | awk '{print $1}'`; 
+	swapp=`blkid | grep swap | awk '{print $1}'`;
+        uuid=`blkid -s UUID -o value /dev/block/sda4 | awk '{print $1}'`; 
+
+
 	if [ -f /system/bin/swapoff ] ; then
-    swff="/system/bin/swapoff"
+        swff="/system/bin/swapoff"
 	else
 	swff="swapoff"
 	fi
-	
-	swff $swapp > /dev/null 2>&1;
+
+        write /sys/class/zram-control/hot_remove $uuid
 
 	for i in /sys/block/zram*; do
 	set_value "1" $i/reset;
@@ -251,6 +249,34 @@ function disable_swap() {
 	for j in /sys/block/vnswap*; do
 	set_value "1" $j/reset;
 	set_value "0" $j/disksize
+	done
+
+	for k in /dev/block/vnswap*; do
+	set_value "1" $k/reset;
+	set_value "0" $k/disksize
+	done
+
+	swff $swapp > /dev/null 2>&1;
+        c=1
+	for l in /dev/block*; do  
+	while [ $c -lt 10 ]
+
+        do
+        if [ -e "$l/zram$c" ]; then
+	swff $l/zram$c > /dev/null 2>&1;
+        fi
+
+        if [ -e "$l/swap$c" ]; then
+	swff $l/swap$c > /dev/null 2>&1;
+        fi
+
+        if [ -e "$l/vnswap$c" ]; then
+	swff $l/vnswap$c > /dev/null 2>&1;
+        fi
+
+	c=$(( $c + 1 ))
+
+        done
 	done
 
 	setprop vnswap.enabled false
@@ -693,7 +719,7 @@ fi
     if [ $PROFILE -eq 1 ];then
     case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
-	
+        set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
@@ -705,12 +731,6 @@ fi
 	set_param cpu4 target_loads "80 380000:39 580000:58 780000:63 980000:81 1080000:92 1180000:77 1280000:98 1380000:86 1580000:98"
 	set_param cpu4 min_sample_time 18000
 
-	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
-	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
-
-	echo 0-3 > /dev/cpuset/background/cpus
-	echo 0-3 > /dev/cpuset/system-background/cpus
-	echo 0 > /proc/sys/kernel/sched_boost
     ;;
 
     "msm8996") #sd820
@@ -815,6 +835,7 @@ fi
 	;;
 
     "msm8953" )  #sd625/626
+	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1680000
@@ -973,12 +994,6 @@ fi
 	set_param cpu4 target_loads "80 380000:39 580000:58 780000:63 980000:81 1080000:92 1180000:77 1280000:98 1380000:86 1580000:98"
 	set_param cpu4 min_sample_time 18000
 
-	write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
-	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 300000
-
-	echo 0-3 > /dev/cpuset/background/cpus
-	echo 0-3 > /dev/cpuset/system-background/cpus
-	echo 0 > /proc/sys/kernel/sched_boost
     ;;
 
     "msm8996")
@@ -1091,6 +1106,7 @@ fi
 	;;
 
     "msm8953" )
+	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1680000:98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1380000
