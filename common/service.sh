@@ -136,8 +136,25 @@ function set_io() {
     ROM=`getprop ro.build.display.id`
     KERNEL="$(uname -r)"
     APP=`getprop ro.product.model`
-    sSOC=`getprop ro.product.board`
-    SOC=$(echo "$sSOC" | tr '[:upper:]' '[:lower:]')
+    sSOC1=`getprop ro.product.board`
+    sSOC2=`getprop ro.board.platform`
+    SOC1=$(echo "$sSOC1" | tr '[:upper:]' '[:lower:]')
+    SOC2=$(echo "$sSOC2" | tr '[:upper:]' '[:lower:]')
+    snapdragon=0
+
+    if [ "$SOC1" != "${SOC1/msm/}" ]; then
+    SOC=$sSOC1
+    snapdragon=1
+    else
+		if [ "$sSOC2" != "${sSOC2/msm/}" ]; then
+		SOC=$sSOC2
+		snapdragon=1
+		else
+		SOC=$sSOC1
+		snapdragon=0
+		fi
+    fi
+	
     cores=`grep -c ^processor /proc/cpuinfo`
     coresmax=$(cat /sys/devices/system/cpu/kernel_max)
 
@@ -214,7 +231,8 @@ logdata "# =============================="
 
 function enable_bcl() {
 
-if [ "$SOC" != "${SOC/msm/}" ] || [ "$SOC" != "${SOC/MSM/}" ] ; then
+if [ $snapdragon -eq 1 ];then
+
     write /sys/module/msm_thermal/core_control/enabled "1"
     write /sys/devices/soc/soc:qcom,bcl/mode -n disable
     write /sys/devices/soc/soc:qcom,bcl/hotplug_mask $bcl_hotplug_mask
@@ -441,7 +459,8 @@ sync;
 
 function CPU_tuning() {
 
-if [ "$SOC" != "${SOC/msm/}" ] || [ "$SOC" != "${SOC/MSM/}" ] ; then
+if [ $snapdragon -eq 1 ];then
+
 logdata "#  Snapdragon SoC detected" 
 
     # disable thermal bcl hotplug to switch governor
