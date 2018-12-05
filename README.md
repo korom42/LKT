@@ -6,7 +6,7 @@ High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
 ### Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for 24 different SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices.
+LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for all mainstream platforms including Snapdragon, Helio, MediaTek & Intel Atom chipsets, covering hundreds of devices.
 
 ### Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
