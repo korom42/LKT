@@ -69,6 +69,7 @@ function set_value() {
 	fi
 }
 
+
 # $1:display-name $2:file path
 function print_value() {
 	if [ -f $2 ]; then
@@ -95,13 +96,13 @@ function set_io() {
 			echo $1 > $2/queue/scheduler
 			echo 128 > $2/queue/read_ahead_kb
 			set_value 0 $2/queue/iostats
-			set_value 128 $2/queue/nr_requests
-			set_value 0 $2/queue/iosched/slice_idle
+			#set_value 128 $2/queue/nr_requests
+			#set_value 0 $2/queue/iosched/slice_idle
 			set_value 1 $2/queue/rq_affinity
 			set_value 1 $2/queue/nomerges
 			set_value 0 $2/queue/add_random
-			set_value 0 $2/bdi/min_ratio
-			set_value 100 $2/bdi/max_ratio
+			#set_value 0 $2/bdi/min_ratio
+			#set_value 100 $2/bdi/max_ratio
   		fi
 	fi
 }
@@ -176,6 +177,13 @@ function set_io() {
     bcores=4
     fi
 
+    if [ -e /sys/devices/system/cpu/cpu0/cpufreq ]; then
+    GOV_PATH_L=/sys/devices/system/cpu/cpu0/cpufreq
+    fi
+    if [ -e /sys/devices/system/cpu/cpu$bcores/cpufreq ]; then
+    GOV_PATH_B=/sys/devices/system/cpu/cpu$bcores/cpufreq
+    fi
+
     if [ -e /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors ]; then
     SILVER=/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors;
     fi
@@ -194,6 +202,21 @@ function set_io() {
     elif [ -e /sys/devices/system/cpu/cpufreq/policy$bcores ]; then 
     GLD=/sys/devices/system/cpu/cpufreq/policy$bcores
     fi
+
+    function before_modify()
+{
+	chown 0.0 $GOV_PATH_L/interactive/*
+	chown 0.0 $GOV_PATH_L/interactive/*
+	chmod 0666 $GOV_PATH_B/interactive/*	
+        chmod 0666 $GOV_PATH_B/interactive/*
+}
+
+    function after_modify()
+{
+	chmod 0444 $GOV_PATH_B/interactive/*	
+        chmod 0444 $GOV_PATH_B/interactive/*
+}
+
 
     function logdata() {
         echo $1 |  tee -a $LOG;
@@ -422,8 +445,8 @@ sysctl -w vm.oom_kill_allocating_task=0
 sysctl -w vm.dirty_background_ratio=1
 sysctl -w vm.dirty_ratio=5
 sysctl -w vm.vfs_cache_pressure=30
-#sysctl -w vm.overcommit_memory=50
-#sysctl -w vm.overcommit_ratio=0
+sysctl -w vm.overcommit_memory=50
+sysctl -w vm.overcommit_ratio=0
 sysctl -w vm.laptop_mode=0
 sysctl -w vm.block_dump=0
 sysctl -w vm.dirty_writeback_centisecs=0
@@ -434,9 +457,9 @@ sysctl -w fs.leases-enable=1
 sysctl -w vm.compact_memory=1
 sysctl -w vm.compact_unevictable_allowed=1
 sysctl -w vm.page-cluster=1
-#sysctl -w vm.extfrag_threshold=500
-#sysctl -w vm.watermark_scale_factor=10
-#sysctl -w stat_interval=1200
+sysctl -w vm.extfrag_threshold=500
+sysctl -w vm.watermark_scale_factor=10
+sysctl -w stat_interval=1200
 sysctl -w vm.panic_on_oom=0
 
 # =========
@@ -500,9 +523,9 @@ fi
 	stop perfd
 	fi
 	
-	#if [ -e /data/system/perfd/default_values ]; then
-	#rm /data/system/perfd/default_values
-	#fi
+	if [ -e /data/system/perfd/default_values ]; then
+	rm /data/system/perfd/default_values
+	fi
 	 
 	sleep 0.1
 	 
@@ -545,13 +568,6 @@ fi
 	if [ -e "/proc/sys/kernel/sched_boost" ]; then
 		write /proc/sys/kernel/sched_boost 0
 	fi
-	fi
-	
-	if [ -e /sys/devices/system/cpu/cpu0/cpufreq ]; then
-    		GOV_PATH_L=/sys/devices/system/cpu/cpu0/cpufreq
-	fi
-	if [ -e /sys/devices/system/cpu/cpu$bcores/cpufreq ]; then
-    		GOV_PATH_B=/sys/devices/system/cpu/cpu$bcores/cpufreq
 	fi
 	
 	string1=/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors;
@@ -655,7 +671,7 @@ fi
 		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
 	fi
     fi
-    chmod 444 $SVD/schedutil/*
+        chmod 444 $SVD/schedutil/*
 	chmod 444 $GLD/schedutil/*
 	fi
 	
@@ -685,10 +701,7 @@ fi
 	set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	set_value "interactive" /sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_governor
 	
-        chown 0.0 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
-	chown 0.0 /sys/devices/system/cpu/cpu$bcores/cpufreq/interactive/*
-	chmod 0666 /sys/devices/system/cpu/cpu0/cpufreq/interactive/*
-	chmod 0666 /sys/devices/system/cpu/cpu$bcores/cpufreq/interactive/*
+        before_modify
 
 	# shared interactive parameters
 	set_param cpu0 timer_rate 20000
@@ -1275,7 +1288,8 @@ fi
     esac
 
     fi
- 
+   
+after_modify
  
 # =========
 # HMP Scheduler Tweaks
@@ -1345,7 +1359,7 @@ write /proc/sys/kernel/sched_freq_inc_notify 3000000
 	# Enable Thermal engine
 	enable_bcl
 
-    # Enable power efficient work_queue mode
+        # Enable power efficient work_queue mode
 	if [ -e /sys/module/workqueue/parameters/power_efficient ]; then
 	set_value "Y" /sys/module/workqueue/parameters/power_efficient 
 	logdata "#  Power efficient work_queue mode = Activated" 
@@ -1692,4 +1706,4 @@ start perfd
 logdata "# ==============================" 
 logdata "#  END : $sDATE" 
 
-exit 0
+exit 0C0_GOVERNOR_DIR
