@@ -1706,4 +1706,4 @@ start perfd
 logdata "# ==============================" 
 logdata "#  END : $sDATE" 
 
-exit 0C0_GOVERNOR_DIR
+exit 0
