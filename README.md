@@ -6,17 +6,11 @@ High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
 ### Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for 24 different SoC including (Snapdragon, Helio, MediaTek & Intel Atom chipsets) covering hundreds of devices.
+LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for all mainstream platforms including Snapdragon, Helio, MediaTek & Intel Atom chipsets, covering hundreds of devices.
 
 ### Features
-```
-• Dynamic CPU tuning
-• Dynamic RAM tuning
-• GPU tuning
-• TCP tuning
-• I/O tuning
-• Doze & deepsleep optimisations
-```
+LKT aims to achieve the **balance** between **power consumption** and **performance**.
+Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences and produce a suitable combination of parameters for almost all mainstream SOCs. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules**, to unify the rest of the parameters for a more consistent experience. Now it also includes EAS parameters for devices with "sched" or "schedutil" governors. 
 
 ### Prerequisites
 
@@ -50,7 +44,7 @@ Kirin 960 (HUAWEI)
 Kirin 970 (HUAWEI)
 Google Pixel & EAS phones
 ```
-Please note that even if your device isn't listed some tweaks will stil apply
+Please note that even if your device isn't listed some parameters will stil apply
 
 ### Installing
 
@@ -77,10 +71,21 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 **Omar Koulache** - [korom42](https://github.com/korom42)
 
 ## Credits
-
-### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/) 
+### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
 ```
-Coolapk@yc9559
+ @yc9559 @Fdss45 @yy688go (好像不见了) @Jouiz @lmentor
+ @小方叔叔 @星辰紫光 @ℳ๓叶落情殇 @屁屁痒 @发热不卡算我输 @予北 
+ @選擇遺忘 @想飞的小伙 @白而出清 @AshLight @微风阵阵 @半阳半
+ @AhZHI @悲欢余生有人听 @YaomiHwang @花生味 @胡同口卖菜的
+ @gce8980 @vesakam @q1006237211 @Runds @lpc3123191239 
+ @萝莉控の胜利 @iMeaCore @Dfift半島鐵盒 @wenjiahong @星空未来
+ @水瓶 @瓜瓜皮 @默认用户名8 @影灬无神 @橘猫520 @此用户名已存在
+ @ピロちゃん @Jaceﮥ @黑白颠倒的年华0 @九日不能贱 @fineable
+ @哑剧 @zokkkk @永恒的丶齿轮 @L风云 @Immature_H @揪你鸡儿
+ @xujiyuan723 @Ace蒙奇 @ちぃ @木子茶i同学 @HEX_Stan @微风阵阵
+ @_暗香浮动月黄昏 @子喜 @ft1858336 @xxxxuanran @Scorpiring
+ @猫见 @僞裝灬 @请叫我芦柑 @吃瓜子的小白 @HELISIGN @鹰雏
+ @贫家boy有何贵干 @Yoooooo
 ```
 ### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
@@ -90,10 +95,7 @@ Coolapk@yc9559
 @ZeroKool76 @ZeroInfinity
 ```
 ### • Special Thanks
-@ahrion @Zackptg5 @topjohnwu
-[Unity Installer](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) 
-[Vol Key Input Code](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410)
-[Magisk](https://github.com/topjohnwu/Magisk)
+@ahrion @Zackptg5 @topjohnwu for making this possible.
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 
