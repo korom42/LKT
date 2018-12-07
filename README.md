@@ -10,7 +10,7 @@ LKT is a cumilation of different strategies that target certain kernel settigns.
 
 ### Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
-Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences and produce a suitable combination of parameters for almost all mainstream SOCs. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules**, to unify the rest of the parameters for a more consistent experience. Now it also includes EAS parameters for devices with "sched" or "schedutil" governors. 
+Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the kernel parameters for a more consistent experience.
 
 ### Prerequisites
 
@@ -44,7 +44,7 @@ Kirin 960 (HUAWEI)
 Kirin 970 (HUAWEI)
 Google Pixel & EAS phones
 ```
-Please note that even if your device isn't listed some parameters will stil apply
+Please note that even if your device isn't listed some parameters may stil apply
 
 ### Installing
 
