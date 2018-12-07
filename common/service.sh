@@ -144,14 +144,14 @@ function set_io() {
     snapdragon=0
 
     if [ "$SOC1" != "${SOC1/msm/}" ]; then
-    SOC=$sSOC1
+    SOC=$SOC1
     snapdragon=1
     else
-		if [ "$sSOC2" != "${sSOC2/msm/}" ]; then
-		SOC=$sSOC2
+		if [ "$SOC2" != "${SOC2/msm/}" ]; then
+		SOC=$SOC2
 		snapdragon=1
 		else
-		SOC=$sSOC1
+		SOC=$SOC1
 		snapdragon=0
 		fi
     fi
