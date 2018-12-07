@@ -206,15 +206,15 @@ function set_io() {
     function before_modify()
 {
 	chown 0.0 $GOV_PATH_L/interactive/*
-	chown 0.0 $GOV_PATH_L/interactive/*
-	chmod 0666 $GOV_PATH_B/interactive/*	
-        chmod 0666 $GOV_PATH_B/interactive/*
+	chown 0.0 $GOV_PATH_B/interactive/*
+	chmod 0666 $GOV_PATH_L/interactive/*	
+ chmod 0666 $GOV_PATH_B/interactive/*
 }
 
     function after_modify()
 {
-	chmod 0444 $GOV_PATH_B/interactive/*	
-        chmod 0444 $GOV_PATH_B/interactive/*
+	chmod 0444 $GOV_PATH_L/interactive/*	
+  chmod 0444 $GOV_PATH_B/interactive/*
 }
 
 
