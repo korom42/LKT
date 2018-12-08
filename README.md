@@ -1,27 +1,25 @@
 # LKT
-
 Legendary Kernel Tweaks
 
 High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
-## Getting Started
-### Why LKT ?
+## Why LKT ?
 LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
 
-### Features
+## Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
 Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the kernel parameters for a more consistent experience.
 
-### Prerequisites
+## Requirements
 What you will need 
 
 ```
-• An android device
-• Magisk 14+
+• Android Gingerbread+
+• Magisk
 • Busybox
 ```
 
-### Compability
+## Compability
 ```
 Snapdragon 625-626
 Snapdragon 636
@@ -44,16 +42,28 @@ Google Pixel & EAS phones
 ```
 Please note that even if your device isn't listed some parameters may stil apply
 
-### Installing
-After downloading the zip file to your phone
+## Changelog
+### v1.2.1 (07/12/2018)
+- Fixed a bug that makes governor parameters not stick after a while
+- Fixed a bug where CPU is not recognized correctly (Improved SoC detecting)
+- Other minor bug fixes & improvements
 
-```
-• Flash in TWRP or Magisk manager
-• Follow the given instructions
-• Reboot
-```
+### v1.2 (05/12/2018)
+- Added missing cpu boost for some SoCs on balanced profile
+- Improved swap detection & disabling (again)
+- Reviewed & removed some stuff
+- Other minor bug fixes & improvements
 
-### How to make sure that it is working ?
+### v1.1 (04/12/2018)
+- Fixed a bug where chip name in upper case isn't recognized
+- Swap partitions detecting improvements
+- Some small but important script code fixes
+ Thanks to whalesplaho @XDA for testing and discovering this
+
+### v1.0 (04/12/2018)
+- First release
+
+## How to make sure that it is working ?
 Using a root file manager check the logs by navigating to
 ```
 /data/LKT.prop
@@ -68,7 +78,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 **Omar Koulache** - [korom42](https://github.com/korom42)
 
 ## Credits
-### • [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
+- ### [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
 ```
  @yc9559 @Fdss45 @yy688go (好像不见了) @Jouiz @lmentor
  @小方叔叔 @星辰紫光 @ℳ๓叶落情殇 @屁屁痒 @发热不卡算我输 @予北 
@@ -84,30 +94,22 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
  @猫见 @僞裝灬 @请叫我芦柑 @吃瓜子的小白 @HELISIGN @鹰雏
  @贫家boy有何贵干 @Yoooooo
 ```
-### • [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
+- ### [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
 @Alcolawl @soniCron @Asiier @Freak07 @Mostafa Wael 
 @Senthil360 @TotallyAnxious @RenderBroken @adanteon  
 @Kyuubi10 @ivicask @RogerF81 @joshuous @boyd95 
 @ZeroKool76 @ZeroInfinity
 ```
-### • Special Thanks
-@ahrion @Zackptg5 @topjohnwu for making this possible.
+- ### [Unity template](https://forum.xda-developers.com/android/software/module-audio-modification-library-t3579612) & [Keycheck Method](https://forum.xda-developers.com/android/software/guide-volume-key-selection-flashable-zip-t3773410) by @ahrion & @Zackptg5 
+
+- ### [Magisk](https://github.com/topjohnwu/Magisk) by @topjohnwu
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
+[XDA FORUMS](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
 
-## Support
-[SUPPORT THE DEVELOPMENT](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
-
-* [![Github](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT)
-* [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-* [![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
-
+[![Github](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
 ---
-<div align="center">
-  <h2>This is the best so so far !</h2>
-</div>
-
 <p align="center"><sub>A project by <a href="https://forum.xda-developers.com/member.php?u=5033594" target="_blank">korom42</a> with ❤<p>
-
-<p align="center"><a href="https://saythanks.io/to/korom42" target="_blank"><img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg?longCache=true&style=flat-square"></a><p>
+ 
+<p align="center"
