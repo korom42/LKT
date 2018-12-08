@@ -135,8 +135,8 @@ function set_io() {
 	# Device infos
     BATT_LEV=`dumpsys battery | grep level | awk '{print $2}'`    
     BATT_TECH=`dumpsys battery | grep technology | awk '{print $2}'`
-    BATT_VOLT=`dumpsys battery | grep voltage | awk '{print $2}'`
-    BATT_TEMP=`dumpsys battery | grep temp | awk '{print $2}'`
+    BATT_VOLT=`dumpsys battery | awk '/^ +voltage:/ && $NF!=0{print $NF}'`
+    BATT_TEMP=`dumpsys battery | grep temperature | awk '{print $2}'`
     BATT_HLTH=`dumpsys battery | grep health | awk '{print $2}'`
     BATT_VOLT=$(awk -v x=$BATT_VOLT 'BEGIN{print x/1000}')
     BATT_TEMP=$(awk -v x=$BATT_T 'BEGIN{print x/10}')
@@ -1711,8 +1711,8 @@ start perfd
 
 logdata "# ==============================" 
 logdata "#  Battery Technology: $BATT_TECH"
-logdata "#  Battery Health = $BATT_HLTH"
-logdata "#  Battery Temp:= $BATT_TEMP °C"
+logdata "#  Battery Health: $BATT_HLTH"
+logdata "#  Battery Temp: $BATT_TEMP °C"
 logdata "#  Battery Voltage: $BATT_VOLT Volts "
 logdata "#  Battery Level: $BATT_LEV % "
 logdata "# ==============================" 
