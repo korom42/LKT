@@ -21,6 +21,7 @@ What you will need
 
 ## Compability
 ```
+Snapdragon 615-616
 Snapdragon 625-626
 Snapdragon 636
 Snapdragon 652-650
@@ -43,6 +44,13 @@ Google Pixel & EAS phones
 Please note that even if your device isn't listed some parameters may stil apply
 
 ## Changelog
+### v1.2.2 (08/12/2018)
+- Added SD845 EAS parameters
+- Added support to SD615/SD616
+- Updated hardware detection method with a better one
+- Added detailed battery health check
+- Other minor bug fixes & improvements
+
 ### v1.2.1 (07/12/2018)
 - Fixed a bug that makes governor parameters not stick after a while
 - Fixed a bug where CPU is not recognized correctly (Improved SoC detecting)
