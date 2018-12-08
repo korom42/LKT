@@ -82,6 +82,10 @@ function print_value() {
 function set_param() {
 	echo $3 > /sys/devices/system/cpu/$1/cpufreq/interactive/$2
 }
+function set_param_eas() {
+	echo $3 > /sys/devices/system/cpu/$1/cpufreq/schedutil/$2
+}
+
 
 # $1:cpu0 $2:timer_rate
 function print_param() {
@@ -226,6 +230,23 @@ function set_io() {
   chmod 0444 $GOV_PATH_B/interactive/*
 }
 
+    function before_modify_eas()
+{
+	chown 0.0 $GOV_PATH_L/schedutil/*
+	chown 0.0 $GOV_PATH_B/schedutil/*
+	chmod 0666 $GOV_PATH_L/schedutil/*	
+	chmod 0666 $GOV_PATH_B/schedutil/*
+	chmod 0666 $SVD/schedutil/*
+	chmod 0666 $GLD/schedutil/*
+}
+
+    function after_modify_eas()
+{
+	chmod 0444 $SVD/schedutil/*
+	chmod 0444 $GLD/schedutil/*
+	chmod 0444 $GOV_PATH_L/schedutil/*	
+	chmod 0444 $GOV_PATH_B/schedutil/*
+}
 
     function logdata() {
         echo $1 |  tee -a $LOG;
@@ -587,11 +608,67 @@ fi
 	logdata "#  EAS Kernel Detected : Tuning 'schedutil'" 
     if [ -e $SVD ] && [ -e $GLD ]; then
 
-	
+
+        before_modify_eas
 	set_value "schedutil" $SVD/scaling_governor 
 	set_value "schedutil" $GLD/scaling_governor
 	
+    case "$SOC" in
+     "sdm845")
 
+	set_value 480000 $GOV_PATH_L/scaling_min_freq
+	set_value 1 /sys/devices/system/cpu/cpu4/online
+	set_value 480000 $GOV_PATH_B/scaling_min_freq
+
+	set_value 90 /proc/sys/kernel/sched_spill_load
+	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
+
+	# avoid permission problem, do not set 0444
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 0-3 /dev/cpuset/system-background/cpus
+	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
+	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
+
+	# set_value 85 /proc/sys/kernel/sched_downmigrate
+	# set_value 95 /proc/sys/kernel/sched_upmigrate
+
+	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+
+        if [ $PROFILE -eq 1 ];then
+
+	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1280000
+	set_param_eas cpu0 hispeed_load 90
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu$bcores hispeed_freq 1280000
+	set_param_eas cpu$bcores hispeed_load 90
+	set_param_eas cpu$bcores pl 0
+	else
+
+	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1180000
+	set_param_eas cpu0 hispeed_load 90
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu0 timer_rate 20000
+	set_param_eas cpu$bcores timer_rate 20000
+	set_param_eas cpu$bcores hispeed_freq 1080000
+	set_param_eas cpu$bcores hispeed_load 90
+	set_param_eas cpu$bcores pl 0
+
+	fi
+    ;;
+    *)
 
     if [ $PROFILE -eq 1 ];then
 	
@@ -680,8 +757,9 @@ fi
 		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
 	fi
     fi
-        chmod 444 $SVD/schedutil/*
-	chmod 444 $GLD/schedutil/*
+        esac
+
+        after_modify_eas
 	fi
 	
 	elif grep -w 'sched' $string1 && grep -w 'sched' $string2; then		
