@@ -6,14 +6,13 @@ High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
 
 ## Getting Started
 ### Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using very simple functions LKT detects the SoC your device have and then it applies the correspending tweaks. This would not be possible without the help of Project WIPE contributors who provided us with interactive governor configs for all mainstream platforms including Snapdragon, Helio, MediaTek & Intel Atom chipsets, covering hundreds of devices.
+LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
 
 ### Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
 Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the kernel parameters for a more consistent experience.
 
 ### Prerequisites
-
 What you will need 
 
 ```
@@ -23,8 +22,6 @@ What you will need
 ```
 
 ### Compability
-
-Every device with the following chipsets
 ```
 Snapdragon 625-626
 Snapdragon 636
@@ -34,6 +31,7 @@ Snapdragon 801-800-805
 Snapdragon 810-808
 Snapdragon 820-821
 Snapdragon 835
+Snapdragon 845
 Exynos 7420 (Samsung)
 Exynos 8890 (Samsung)
 Exynos 8895 (Samsung)
@@ -47,7 +45,6 @@ Google Pixel & EAS phones
 Please note that even if your device isn't listed some parameters may stil apply
 
 ### Installing
-
 After downloading the zip file to your phone
 
 ```
@@ -57,7 +54,7 @@ After downloading the zip file to your phone
 ```
 
 ### How to make sure that it is working ?
-Using a file manager check the logs by navigating to
+Using a root file manager check the logs by navigating to
 ```
 /data/LKT.prop
 ```
