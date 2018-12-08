@@ -137,23 +137,13 @@ function set_io() {
     ROM=`getprop ro.build.display.id`
     KERNEL="$(uname -r)"
     APP=`getprop ro.product.model`
-    sSOC1=`getprop ro.product.board`
-    sSOC2=`getprop ro.board.platform`
-    SOC1=$(echo "$sSOC1" | tr '[:upper:]' '[:lower:]')
-    SOC2=$(echo "$sSOC2" | tr '[:upper:]' '[:lower:]')
+    SOC=$(awk '/^Hardware/{print $NF}' /proc/cpuinfo | tr '[:upper:]' '[:lower:]')
     snapdragon=0
 
-    if [ "$SOC1" != "${SOC1/msm/}" ]; then
-    SOC=$SOC1
+    if [ "$SOC" != "${SOC/msm/}" ]; then
     snapdragon=1
     else
-		if [ "$SOC2" != "${SOC2/msm/}" ]; then
-		SOC=$SOC2
-		snapdragon=1
-		else
-		SOC=$SOC1
-		snapdragon=0
-		fi
+    snapdragon=0
     fi
 	
     cores=`grep -c ^processor /proc/cpuinfo`
@@ -988,7 +978,7 @@ fi
 	if [ "$SOC" = "moorefield" ]; then 
 	echo "Intel chip detected"
 	else
-	logdata "# *WARNING* Governor tweaks failed - Unrecognized chip : $SOC" 
+	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
 	fi
 	
     ;;
@@ -1269,7 +1259,7 @@ fi
 	if [ "$SOC" = "moorefield" ]; then 
 	echo "Intel chip detected"
 	else
-	logdata "# *WARNING* Governor tweaks failed - Unrecognized chip : $SOC" 
+	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
 	fi
 		
     ;;
@@ -1351,7 +1341,7 @@ write /proc/sys/kernel/sched_freq_inc_notify 3000000
 #fi
 
 	else
-	logdata "# *WARNING* Governor tweaks failed - Unsupported governor: $govn" 
+	logdata "# *ERROR* Governor tweaks failed - Unsupported governor: $govn" 
 
 	fi
 	fi
