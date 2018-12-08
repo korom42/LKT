@@ -117,7 +117,7 @@ function set_io() {
     V="1.2"
     PROFILE=<PROFILE_MODE>
     LOG=/data/LKT.prop
-    sDATE=`date +%Y.%m.%d-%H.%M`
+    sDATE=`date | awk '{print $4}'`
     sbusybox=`busybox | awk 'NR==1{print $2}'` 
    
     # RAM variables
@@ -133,6 +133,13 @@ function set_io() {
     bcl_hotplug_mask=`cat /sys/devices/soc/soc:qcom,bcl/hotplug_mask`
 	
 	# Device infos
+    BATT_LEV=`dumpsys battery | grep level | awk '{print $2}'`    
+    BATT_TECH=`dumpsys battery | grep technology | awk '{print $2}'`
+    BATT_VOLT=`dumpsys battery | grep voltage | awk '{print $2}'`
+    BATT_TEMP=`dumpsys battery | grep temp | awk '{print $2}'`
+    BATT_HLTH=`dumpsys battery | grep health | awk '{print $2}'`
+    BATT_VOLT=$(awk -v x=$BATT_VOLT 'BEGIN{print x/1000}')
+    BATT_TEMP=$(awk -v x=$BATT_T 'BEGIN{print x/10}')
     VENDOR=`getprop ro.product.brand`
     ROM=`getprop ro.build.display.id`
     KERNEL="$(uname -r)"
@@ -144,6 +151,18 @@ function set_io() {
     snapdragon=1
     else
     snapdragon=0
+    fi
+
+    if [ $BATT_HLTH -eq "2" ];then
+    BATT_HLTH="Very Good"
+    elif [ $BATT_HLTH -eq "3" ];then
+    BATT_HLTH="Good"
+    elif [ $BATT_HLTH -eq "4" ];then
+    BATT_HLTH="Poor"
+    elif [ $BATT_HLTH -eq "5" ];then
+    BATT_HLTH="Sh*t"
+    else
+    BATT_HLTH="Unknown"
     fi
 	
     cores=`grep -c ^processor /proc/cpuinfo`
@@ -1678,13 +1697,6 @@ for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -
 
 logdata "#  Clean-up = Executed" 
 
-# =========
-# Battery Check
-# =========
-
-BATTLEVEL=`cat /sys/class/power_supply/battery/capacity`;
-logdata "#  Battery Charge = $BATTLEVEL % "
-
 # FS-TRIM
 fstrim -v /cache
 fstrim -v /data
@@ -1693,7 +1705,17 @@ logdata "#  FS-TRIM = Executed"
 
 start perfd
 
+# =========
+# Battery Check
+# =========
+
 logdata "# ==============================" 
-logdata "#  END : $sDATE" 
+logdata "#  Battery Technology: $BATT_TECH"
+logdata "#  Battery Health = $BATTLEVEL"
+logdata "#  Battery Temp:= $BATT_HLTH °C"
+logdata "#  Battery Voltage: $BATT_VOLT Volts "
+logdata "#  Battery Level: $BATTLEVEL % "
+logdata "# ==============================" 
+logdata "#  Finished : $sDATE" 
 
 exit 0
