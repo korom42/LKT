@@ -3,8 +3,8 @@
 # Codename: LKT
 # Author: korom42 @ XDA
 # Device: Universal
-# Version : 1.2
-# Last Update: 05.DEC.2018
+# Version : 1.2.2
+# Last Update: 08.DEC.2018
 # ====================================================#
 # THE BEST BATTERY MOD YOU CAN EVER USE
 # JUST FLASH AND FORGET
@@ -118,7 +118,7 @@ function set_io() {
     sleep 48
 
     #MOD Variable
-    V="1.2"
+    V="1.2.2"
     PROFILE=<PROFILE_MODE>
     LOG=/data/LKT.prop
     dt=$(date '+%d/%m/%Y %H:%M:%S');
@@ -268,7 +268,7 @@ function set_io() {
 logdata "###### LKT™ $V" 
 logdata "###### Profile : $PROFILE_M" 
 logdata "" 
-logdata "#  START : $dt" 
+logdata "#  START : $(date +"%d-%m-%Y %r")" 
 logdata "#  ==============================" 
 logdata "#  Vendor : $VENDOR" 
 logdata "#  Device : $APP" 
@@ -1871,6 +1871,6 @@ logdata "#  Battery Temp: $BATT_TEMP °C"
 logdata "#  Battery Voltage: $BATT_VOLT Volts "
 logdata "#  Battery Level: $BATT_LEV % "
 logdata "# ==============================" 
-logdata "#  Finished : $dt" 
+logdata "#  Finished : $(date +"%d-%m-%Y %r")" 
 
 exit 0
