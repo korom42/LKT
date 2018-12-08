@@ -953,7 +953,8 @@ fi
     
 	;;
 
-    "msm8953" )  #sd625/626
+
+	"msm8953")  #sd625/626
 	set_value 0 /proc/sys/kernel/sched_boost
 	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1880000:138000"
@@ -961,9 +962,9 @@ fi
 	set_param cpu0 go_hispeed_load 97
 	set_param cpu0 target_loads "80 980000:63 1380000:72 1680000:97"
 	set_param cpu0 min_sample_time 18000
-    ;;
+	;;
 
-	
+
 	"universal8895")  #EXYNOS8895 (S8)
 	set_param cpu0 above_hispeed_delay "38000 1380000:98000"
 	set_param cpu0 hispeed_freq 1180000
@@ -975,7 +976,7 @@ fi
 	set_param cpu4 go_hispeed_load 98
 	set_param cpu4 target_loads "80 780000:40 880000:34 980000:66 1080000:31 1180000:72 1380000:86 1680000:98"
 	set_param cpu4 min_sample_time 18000
-    ;;
+	;;
 
 	
 	"universal8890")  #EXYNOS8890 (S7)
@@ -1072,7 +1073,7 @@ fi
 	*)
 	
 	
-	if [ "$SOC" = "moorefield" ]; then 
+	if [ "$SOC" = "moorefield" ] || [ "$SOC" = "msm8939" ] || [ "$SOC" = "msm8939v2" ]; then 
 	echo "Intel chip detected"
 	else
 	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
@@ -1092,7 +1093,37 @@ fi
 	set_param cpu0 min_sample_time 18000
 	;;
     esac
- 
+    case "$SOC" in
+	"msm8939" | "msm8939v2")  #sd615/616
+	set_value "0:980000" /sys/module/cpu_boost/parameters/input_boost_freq
+
+	set_value 25 /proc/sys/kernel/sched_downmigrate
+	set_value 45 /proc/sys/kernel/sched_upmigrate
+
+	set_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+
+	set_value 0 $GOV_PATH_L/interactive/ignore_hispeed_on_notif
+	set_value 0 $GOV_PATH_L/interactive/enable_prediction
+
+	set_value 0 $GOV_PATH_B/interactive/ignore_hispeed_on_notif
+	set_value 0 $GOV_PATH_B/interactive/enable_prediction
+
+	set_param cpu0 above_hispeed_delay "18000 1344000:98000 1459000:138000"
+	set_param cpu0 hispeed_freq 1113000
+	set_param cpu0 go_hispeed_load 94
+	set_param cpu0 target_loads "80 980000:66 1113000:96"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu4 above_hispeed_delay "18000 1344000:98000 1459000:138000"
+	set_param cpu4 hispeed_freq 1344000
+	set_param cpu4 go_hispeed_load 94
+	set_param cpu4 target_loads "80 980000:66 1113000:96"
+	set_param cpu4 min_sample_time 18000
+	set_param cpu4 use_sched_load 1
+	set_param cpu0 use_sched_load 1
+    esac
+
     else
 
     case "$SOC" in
@@ -1353,7 +1384,7 @@ fi
 
 	*)
 	
-	if [ "$SOC" = "moorefield" ]; then 
+	if [ "$SOC" = "moorefield" ] || [ "$SOC" = "msm8939" ] || [ "$SOC" = "msm8939v2" ]; then 
 	echo "Intel chip detected"
 	else
 	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
@@ -1374,6 +1405,47 @@ fi
 	;;
     esac
 
+    case "$SOC" in
+	"msm8939" | "msm8939v2")  #sd615/616
+	set_value "0:980000" /sys/module/cpu_boost/parameters/input_boost_freq
+
+	set_value 25 /proc/sys/kernel/sched_downmigrate
+	set_value 45 /proc/sys/kernel/sched_upmigrate
+
+	set_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+
+	set_value 0 $GOV_PATH_L/interactive/ignore_hispeed_on_notif
+	set_value 0 $GOV_PATH_L/interactive/enable_prediction
+
+	set_value 0 $GOV_PATH_B/interactive/ignore_hispeed_on_notif
+	set_value 0 $GOV_PATH_B/interactive/enable_prediction
+
+	set_param cpu0 above_hispeed_delay "18000 1344000:98000 1459000:138000"
+	set_param cpu0 hispeed_freq 1113000
+	set_param cpu0 go_hispeed_load 94
+	set_param cpu0 target_loads "80 980000:66 1113000:96"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu4 above_hispeed_delay "18000 1344000:98000 1459000:138000"
+	set_param cpu4 hispeed_freq 1344000
+	set_param cpu4 go_hispeed_load 94
+	set_param cpu4 target_loads "80 980000:66 1113000:96"
+	set_param cpu4 min_sample_time 18000
+	set_param cpu4 use_sched_load 1
+	set_param cpu0 use_sched_load 1
+
+	set_param cpu0 above_hispeed_delay "98000 1459000:138000"
+	set_param cpu0 hispeed_freq 1113000
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 target_loads "80 980000:63 1113000:72 1344000:97"
+	set_param cpu0 min_sample_time 18000
+	set_param cpu4 above_hispeed_delay "98000 1459000:138000"
+	set_param cpu4 hispeed_freq 1344000
+	set_param cpu4 go_hispeed_load 97
+	set_param cpu4 target_loads "80 980000:63 1113000:72 1344000:97"
+	set_param cpu4 min_sample_time 18000
+    esac
     fi
    
 after_modify
