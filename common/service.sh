@@ -1711,10 +1711,10 @@ start perfd
 
 logdata "# ==============================" 
 logdata "#  Battery Technology: $BATT_TECH"
-logdata "#  Battery Health = $BATTLEVEL"
-logdata "#  Battery Temp:= $BATT_HLTH °C"
+logdata "#  Battery Health = $BATT_HLTH"
+logdata "#  Battery Temp:= $BATT_TEMP °C"
 logdata "#  Battery Voltage: $BATT_VOLT Volts "
-logdata "#  Battery Level: $BATTLEVEL % "
+logdata "#  Battery Level: $BATT_LEV % "
 logdata "# ==============================" 
 logdata "#  Finished : $sDATE" 
 
