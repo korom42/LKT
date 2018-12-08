@@ -139,7 +139,7 @@ function set_io() {
     BATT_TEMP=`dumpsys battery | grep temperature | awk '{print $2}'`
     BATT_HLTH=`dumpsys battery | grep health | awk '{print $2}'`
     BATT_VOLT=$(awk -v x=$BATT_VOLT 'BEGIN{print x/1000}')
-    BATT_TEMP=$(awk -v x=$BATT_T 'BEGIN{print x/10}')
+    BATT_TEMP=$(awk -v x=$BATT_TEMP 'BEGIN{print x/10}')
     VENDOR=`getprop ro.product.brand`
     ROM=`getprop ro.build.display.id`
     KERNEL="$(uname -r)"
