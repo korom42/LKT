@@ -838,7 +838,7 @@ fi
     if [ $PROFILE -eq 1 ];then
     case "$SOC" in
     "msm8998" | "apq8098_latv") #sd835
-        set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+        set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
@@ -859,7 +859,7 @@ fi
 
 	set_value 25 /proc/sys/kernel/sched_downmigrate
 	set_value 45 /proc/sys/kernel/sched_upmigrate
-	set_value "0:1280000 1:1280000 2:0 3:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1280000 2:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "58000 1280000:98000 1580000:58000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
@@ -882,7 +882,7 @@ fi
 	set_value "0:1344000 4:1440000" /sys/module/msm_performance/parameters/cpu_max_freq
 	set_value 1344000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 	set_value 1440000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
-	set_value "0:1180000 1:1180000 2:1180000 3:1180000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1180000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 97
@@ -902,14 +902,14 @@ fi
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 99
 	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "1 580000:60 680000:81 880000:42 980000:90 1480000:80 1680000:99"
+	set_param cpu0 target_loads "80 580000:60 680000:81 880000:42 980000:90 1480000:80 1680000:99"
 	set_param cpu0 min_sample_time 18000
 
     ;;
 
     "sdm660") #sd660
 
-	set_value "0:1480000 1:1480000 2:1480000 3:1480000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1480000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000"
 	set_param cpu0 hispeed_freq 1480000
 	set_param cpu0 go_hispeed_load 98
@@ -924,7 +924,7 @@ fi
     ;;
     "msm8956" | "msm8976")  #sd652/650
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value "0:1380000 1:1380000 2:1380000 3:1380000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1380000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1380000:58000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 97
@@ -939,7 +939,7 @@ fi
     ;;
 
     "sdm636" ) #sd636
-	set_value "0:1480000 1:1480000 2:1480000 3:1480000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1480000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1380000:78000 1480000:98000 1580000:78000"
 	set_param cpu0 hispeed_freq 1080000
 	set_param cpu0 go_hispeed_load 98
@@ -956,7 +956,7 @@ fi
 
 	"msm8953")  #sd625/626
 	set_value 0 /proc/sys/kernel/sched_boost
-	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1680000
 	set_param cpu0 go_hispeed_load 97
@@ -1130,7 +1130,7 @@ fi
     "msm8998" | "apq8098_latv") #sd835
 
 	# configure governor settings for little cluster
-	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1580000:98000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 98
@@ -1153,7 +1153,7 @@ fi
 
 	set_value 25 /proc/sys/kernel/sched_downmigrate
 	set_value 45 /proc/sys/kernel/sched_upmigrate
-	set_value "0:1280000 1:1280000 2:0 3:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1280000 2:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1580000:58000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 97
@@ -1176,7 +1176,7 @@ fi
 	set_value "0:1344000 4:1440000" /sys/module/msm_performance/parameters/cpu_max_freq
 	set_value 1344000 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 	set_value 1440000 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
-	set_value "0:1180000 1:1180000 2:1180000 3:1180000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1180000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "98000 1280000:18000"
 	set_param cpu0 hispeed_freq 1180000
 	set_param cpu0 go_hispeed_load 97
@@ -1192,20 +1192,25 @@ fi
 
     "msm8974" | "apq8084")
 	
+	stop mpdecision
 	setprop ro.qualcomm.perf.cores_online 2
-	set_param cpu0 above_hispeed_delay "18000 1480000:78000 1780000:138000"
+	set_value 2500 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value "380000" /sys/module/cpu_boost/parameters/input_boost_freq
+
+	set_param cpu0 boostpulse_duration 0
+	set_param cpu0 above_hispeed_delay "18000 1680000:98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1180000
-	set_param cpu0 go_hispeed_load 99
-	set_param cpu0 boostpulse_duration 18000
-	set_param cpu0 target_loads "49 380000:37 580000:65 680000:81 880000:45 980000:91 1480000:80 1680000:99"
+	set_param cpu0 go_hispeed_load 97
+	set_param cpu0 target_loads "80 380000:6 580000:25 680000:43 880000:61 980000:86 1180000:97"
 	set_param cpu0 min_sample_time 18000
+	start mpdecision
 
     ;;
 
     "sdm660")
 
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value "0:1080000 1:1080000 2:1080000 3:1080000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1480000:58000"
 	set_param cpu0 hispeed_freq 1080000
 	set_param cpu0 go_hispeed_load 91
@@ -1222,7 +1227,7 @@ fi
     ;;
     "msm8956" | "msm8976")
 	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value "0:980000 1:980000 2:980000 3:980000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:980000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 boost 0
 	set_param cpu4 boost 0
 	set_param cpu0 above_hispeed_delay "18000 1180000:38000 1280000:58000 1380000:18000"
@@ -1241,7 +1246,7 @@ fi
     ;;
 
     "sdm636" )
-	set_value "0:1480000 1:1480000 2:1480000 3:1480000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1480000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1380000:78000 1480000:98000 1580000:38000"
 	set_param cpu0 hispeed_freq 1080000
 	set_param cpu0 go_hispeed_load 98
@@ -1257,7 +1262,7 @@ fi
 
     "msm8953" )
 	set_value 0 /proc/sys/kernel/sched_boost
-	set_value "0:1680000 1:1680000 2:1680000 3:1680000 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1680000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_param cpu0 above_hispeed_delay "18000 1680000:98000 1880000:138000"
 	set_param cpu0 hispeed_freq 1380000
 	set_param cpu0 go_hispeed_load 94
