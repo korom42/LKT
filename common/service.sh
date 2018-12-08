@@ -117,7 +117,7 @@ function set_io() {
     V="1.2"
     PROFILE=<PROFILE_MODE>
     LOG=/data/LKT.prop
-    sDATE=`date | awk '{print $4}'`
+    dt=$(date '+%d/%m/%Y %H:%M:%S');
     sbusybox=`busybox | awk 'NR==1{print $2}'` 
    
     # RAM variables
@@ -247,7 +247,7 @@ function set_io() {
 logdata "###### LKT™ $V" 
 logdata "###### Profile : $PROFILE_M" 
 logdata "" 
-logdata "#  START : $sDATE" 
+logdata "#  START : $dt" 
 logdata "#  ==============================" 
 logdata "#  Vendor : $VENDOR" 
 logdata "#  Device : $APP" 
@@ -1716,6 +1716,6 @@ logdata "#  Battery Temp: $BATT_TEMP °C"
 logdata "#  Battery Voltage: $BATT_VOLT Volts "
 logdata "#  Battery Level: $BATT_LEV % "
 logdata "# ==============================" 
-logdata "#  Finished : $sDATE" 
+logdata "#  Finished : $dt" 
 
 exit 0
