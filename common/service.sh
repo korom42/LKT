@@ -431,22 +431,22 @@ LMK=$(round ${f_LMK} 0)
  # Settings inspired by HTC stock firmware 
  # Tuned by korom42 for multi-tasking and saving CPU cycles
 
-f_LMK1=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1024/4}') #Low Memory Killer 1
+f_LMK1=$(awk -v x=$LMK -v y=$calculator 'BEGIN{print x*y*1024/4}') #Low Memory Killer 1
 LMK1=$(round ${f_LMK1} 0)
 
-f_LMK2=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1.5}') #Low Memory Killer 2
+f_LMK2=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.5}') #Low Memory Killer 2
 LMK2=$(round ${f_LMK2} 0)
 
-f_LMK3=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1.8}') #Low Memory Killer 3
+f_LMK3=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.8}') #Low Memory Killer 3
 LMK3=$(round ${f_LMK3} 0)
 
-f_LMK4=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*2.2}') #Low Memory Killer 4
+f_LMK4=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*2.2}') #Low Memory Killer 4
 LMK4=$(round ${f_LMK4} 0)
 
-f_LMK5=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*3.5}') #Low Memory Killer 5
+f_LMK5=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*3.5}') #Low Memory Killer 5
 LMK5=$(round ${f_LMK5} 0)
 
-f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*4.5}') #Low Memory Killer 6
+f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*4.5}') #Low Memory Killer 6
 LMK6=$(round ${f_LMK6} 0)
 
 ADJ1=0
