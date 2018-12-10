@@ -12,7 +12,7 @@ LKT can identify your <code>hardware</code> and tweak your kernel for maximum po
 </p>
  
 ## Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settigns.
+LKT is a cumilation of different strategies that target certain kernel settings.
 
 What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free.
 Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
