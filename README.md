@@ -4,7 +4,7 @@
   <strong>legendary.kernel.tweaks</strong>
 </div>
 <div align="center">
-LKT can identify your <code>hardware</code> and tweak your kernel for maximum power efficiency without deteriorating performance
+LKT can identify your <code>hardware</code> and tweak your <code>kernel</code> for maximum power efficiency without deteriorating performance
 </div>
 <br />
 <p align="center">
@@ -12,14 +12,14 @@ LKT can identify your <code>hardware</code> and tweak your kernel for maximum po
 </p>
  
 ## Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settings.
+LKT is a cumilation of different strategies that target certain <code>kernel</code> settings.
 
 What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free.
 Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
 
 ## Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
-Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to EAS, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the kernel parameters for a more consistent experience.
+Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to <code>EAS</code>, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the <code>kernel</code> parameters for a more consistent experience.
 
 ## Requirements
 What you will need 
@@ -110,6 +110,3 @@ LKT is an advanced tweaks collection that act on `kernel` level. If you don't kn
 - ### [Magisk](https://github.com/topjohnwu/Magisk) by @topjohnwu
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
-[XDA FORUMS](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
-
-[![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
