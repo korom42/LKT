@@ -15,11 +15,11 @@ LKT can identify your <code>hardware</code> and tweak your <code>kernel</code> f
 LKT is a cumilation of different strategies that target certain <code>kernel</code> settings.
 
 What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free.
-Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
+Using simple functions LKT detects the <code>hardware</code> of your device then it applies the corresponding changes. It does support all mainstream platforms including <code>Snapdragon, Kirin, MediaTek etc.</code> covering hundreds of devices.
 
 ## Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
-Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to <code>EAS</code>, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, EAS has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the <code>kernel</code> parameters for a more consistent experience.
+Compared to tuning the parameters manually, LKT adopts Project WIPE excellent open source parameters for almost all mainstream SOCs that are generated via machine learning (A.I) and can adapt to multiple styles of workload sequences. This idea is similar to <code>EAS</code>, which takes into account both performance and power consumption costs through power consumption models and workload sequence, but obviously, <code>EAS</code> has a much lower response time and replaces tuning with decision logic. In addition, it also includes other parameter tuning, such as **HMP parameters, Virtual Memory, GPU, I/O scheduler, TCP and Doze rules** to unify the rest of the <code>kernel</code> parameters for a more consistent experience.
 
 ## Requirements
 What you will need 
@@ -83,7 +83,7 @@ Please note that even if your device isn't listed some parameters may stil apply
 - First release
 
 ## How to make sure that it is working ?
-Using a root file manager check the logs by navigating to `/data/LKT.prop`
+Using a <code>root</code> file manager check the logs by navigating to `/data/LKT.prop`
 You may screenshot & upload your logs to share them in case of having troubles
 
 ## Disclaimer
