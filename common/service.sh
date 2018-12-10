@@ -153,6 +153,8 @@ function set_io() {
 
     if [ "$SOC" != "${SOC/msm/}" ]; then
     snapdragon=1
+   elif [ "$SOC" != "${SOC/sdm/}" ]; then
+    snapdragon=1
     else
     snapdragon=0
     fi
