@@ -1,10 +1,21 @@
-# LKT
-Legendary Kernel Tweaks
+<h1 align="center">LKT - Magisk :checkered_flag:</h1>
 
-High performance & power saving tweaks for all devices (THAT ACTUALLY WORK)
-
+<div align="center">
+  <strong>legendary.kernel.tweaks</strong>
+</div>
+<div align="center">
+LKT can identify your <code>hardware</code> and tweak your kernel for maximum power efficiency without deteriorating performance
+</div>
+<br />
+<p align="center">
+ <a href="https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688"><img src="https://img.shields.io/badge/XDA-Thread-orange.svg"></a><br /><a href="https://t.me/LKT_XDA"><img src="https://img.shields.io/badge/Telegram-Channel-blue.svg"></a>
+</p>
+ 
 ## Why LKT ?
-LKT is a cumilation of different strategies that target certain kernel settigns. What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free. Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
+LKT is a cumilation of different strategies that target certain kernel settigns.
+
+What makes this special and stand out from the crowd is being universal and device specific at the same time. And it's also BS free.
+Using simple functions LKT detects the hardware of your device then it applies the corresponding changes. This would not be possible without the help of Project WIPE contributors that provides interactive governor configs for all mainstream platforms including Snapdragon, Kirin, MediaTek etc. Covering hundreds of devices.
 
 ## Features
 LKT aims to achieve the **balance** between **power consumption** and **performance**.
@@ -72,14 +83,11 @@ Please note that even if your device isn't listed some parameters may stil apply
 - First release
 
 ## How to make sure that it is working ?
-Using a root file manager check the logs by navigating to
-```
-/data/LKT.prop
-```
+Using a root file manager check the logs by navigating to `/data/LKT.prop`
 You may screenshot & upload your logs to share them in case of having troubles
 
 ## Disclaimer
-LKT is a collection of advanced tweaks that act on kernel level. If you don't know how it works, then please try this at your own risk. I won't be responsible for any damage or loss. Never forget to make backups.
+LKT is an advanced tweaks collection that act on `kernel` level. If you don't know how it works then use it at your own risk. I won't be responsible for any damage or loss. Always have backups.
 
 ## Authors
 
@@ -88,7 +96,7 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 ## Credits
 - ### [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
 ```
-@yc9559 & @cjybyjk
+@yc9559 @cjybyjk
 ```
 - ### [AKT contributors](https://github.com/mostafawael/OP5-AKT) 
 ```
@@ -104,4 +112,4 @@ LKT is a collection of advanced tweaks that act on kernel level. If you don't kn
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
 [XDA FORUMS](https://forum.xda-developers.com/apps/magisk/xz-lxt-1-0-insane-battery-life-12h-sot-t3700688)
 
-[![Github](https://img.shields.io/badge/Github-Source-black.svg)](https://github.com/korom42/LKT) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
+[![HitCount](http://hits.dwyl.io/Korom42/LKT.svg)](http://hits.dwyl.io/Korom42/LKT)
