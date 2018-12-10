@@ -56,7 +56,7 @@ Please note that even if your device isn't listed some parameters may stil apply
 
 ## Changelog
 
-### v1.2.2 (12/12/2018)
+### v1.2.2 (10/12/2018)
 - Added SD845 & SD835 EAS parameters
 - Added support to SD615/SD616
 - Updated hardware detection method with a better one
