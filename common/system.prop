@@ -1,5 +1,5 @@
 #LKT™ - Begin
-ro.debuggable=0
+ro.debuggable=1
 debug.atrace.tags.enableflags=0
 persist.sys.scrollingcache=3
 power.saving.mode=1

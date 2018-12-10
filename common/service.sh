@@ -350,10 +350,10 @@ function disable_swap() {
         done
 	done
 
-	setprop vnswap.enabled false
-	setprop ro.config.zram false
-	setprop ro.config.zram.support false
-	setprop zram.disksize 0
+	resetprop -n vnswap.enabled false
+	resetprop -n ro.config.zram false
+	resetprop -n ro.config.zram.support false
+	resetprop -n zram.disksize 0
 	set_value 0 /proc/sys/vm/swappiness
 	sysctl -w vm.swappiness=0
 }
@@ -369,6 +369,45 @@ fi;
 }
 
 function RAM_tuning() { 
+    calculator=3
+    if [ $TOTAL_RAM -lt 2097152 ]; then
+    calculator="2.55"
+    disable_swap
+    #disable_lmk
+    resetprop -n ro.config.low_ram true
+    resetprop -n ro.board_ram_size low
+    
+    #Enable B service adj transition for 2GB or less memory
+    resetprop -n ro.vendor.qti.sys.fw.bservice_enable true
+    resetprop -n ro.vendor.qti.sys.fw.bservice_limit 5
+    resetprop -n ro.vendor.qti.sys.fw.bservice_age 5000
+    resetprop -n ro.sys.fw.bg_apps_limit 20
+
+    #Enable Delay Service Restart
+    setprop ro.vendor.qti.am.reschedule_service true
+      
+    elif [ $TOTAL_RAM -lt 3145728 ]; then
+    calculator="2.77"
+    disable_swap
+    #disable_lmk
+    resetprop -n ro.sys.fw.bg_apps_limit 28
+	
+    elif [ $TOTAL_RAM -lt 4194304 ]; then
+    calculator="2.88"
+    disable_swap
+    #disable_lmk
+    resetprop -n ro.sys.fw.bg_apps_limit 32
+    fi
+ 
+    if [ $TOTAL_RAM -gt 4194304 ]; then
+    disable_swap
+    #disable_lmk
+    resetprop -n ro.sys.fw.bg_apps_limit 48
+    fi
+    resetprop -n sys.config.samp_spcm_enable false
+    resetprop -n sys.config.samp_enable false
+    resetprop -n ro.config.fha_enable true
+    resetprop -n ro.sys.fw.use_trim_settings false
 
   # LMK Calculator
   # This is a Calculator for the Android Low Memory Killer 
@@ -378,9 +417,7 @@ function RAM_tuning() {
   # Code COPYRIGHT korom42
 
 
-calculator=0
 divisor=$(awk -v x=$TOTAL_RAM 'BEGIN{print x/256}')
-
 var_one=$(awk -v x=$TOTAL_RAM -v y=2 'BEGIN{print sqrt(x)*sqrt(2)}')
 var_two=$(awk -v x=$TOTAL_RAM -v p=3.14 'BEGIN{print x*sqrt(p)}')
 var_three=$(awk -v x=$var_one -v y=$var_two -v z=$divisor 'BEGIN{print (x+y)/z}')
@@ -392,22 +429,22 @@ LMK=$(round ${f_LMK} 0)
  # Settings inspired by HTC stock firmware 
  # Tuned by korom42 for multi-tasking and saving CPU cycles
 
-f_LMK1=$(awk -v x=$LMK 'BEGIN{print x*3*1024/4}') #Low Memory Killer 1
+f_LMK1=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1024/4}') #Low Memory Killer 1
 LMK1=$(round ${f_LMK1} 0)
 
-f_LMK2=$(awk -v x=$LMK1 'BEGIN{print x*1.5}') #Low Memory Killer 2
+f_LMK2=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1.5}') #Low Memory Killer 2
 LMK2=$(round ${f_LMK2} 0)
 
-f_LMK3=$(awk -v x=$LMK1 'BEGIN{print x*1.8}') #Low Memory Killer 3
+f_LMK3=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*1.8}') #Low Memory Killer 3
 LMK3=$(round ${f_LMK3} 0)
 
-f_LMK4=$(awk -v x=$LMK1 'BEGIN{print x*3.5}') #Low Memory Killer 4
+f_LMK4=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*2.2}') #Low Memory Killer 4
 LMK4=$(round ${f_LMK4} 0)
 
-f_LMK5=$(awk -v x=$LMK1 'BEGIN{print x*4.5}') #Low Memory Killer 5
+f_LMK5=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*3.5}') #Low Memory Killer 5
 LMK5=$(round ${f_LMK5} 0)
 
-f_LMK6=$(awk -v x=$LMK1 'BEGIN{print x*5.5}') #Low Memory Killer 6
+f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*y*4.5}') #Low Memory Killer 6
 LMK6=$(round ${f_LMK6} 0)
 
 ADJ1=0
@@ -431,38 +468,12 @@ fi
 if [ -e "/sys/module/lowmemorykiller/parameters/minfree" ]; then
    set_value "$LMK1,$LMK2,$LMK3,$LMK4,$LMK5,$LMK6" /sys/module/lowmemorykiller/parameters/minfree
    set_value "$ADJ1,$ADJ2,$ADJ3,$ADJ4,$ADJ5,$ADJ6" /sys/module/lowmemorykiller/parameters/adj
-   setprop lmk.autocalc true
+   resetprop -n lmk.autocalc true
 else
 	logdata "#  *WARNING* LMK cannot currently be modified on your Kernel" 
 fi
 
-    if [ $TOTAL_RAM -lt 2097152 ]; then
-	disable_swap
 
-    setprop ro.config.low_ram true
-    setprop ro.board_ram_size low
-    
-	#Enable B service adj transition for 2GB or less memory
-    setprop ro.vendor.qti.sys.fw.bservice_enable true
-    setprop ro.vendor.qti.sys.fw.bservice_limit 5
-    setprop ro.vendor.qti.sys.fw.bservice_age 5000
-
-    #Enable Delay Service Restart
-    setprop ro.vendor.qti.am.reschedule_service true
-      
-	elif [ $TOTAL_RAM -lt 3145728 ]; then
-    disable_swap
-	#disable_lmk
-	
-    elif [ $TOTAL_RAM -lt 4194304 ]; then
-    disable_swap
-	#disable_lmk
-    fi
- 
-    if [ $TOTAL_RAM -gt 4194304 ]; then
-    disable_swap
-	#disable_lmk
-    fi
 
 # =========
 # Vitual Memory
@@ -486,11 +497,13 @@ sysctl -w fs.lease-break-time=20
 sysctl -w fs.leases-enable=1
 sysctl -w vm.compact_memory=1
 sysctl -w vm.compact_unevictable_allowed=1
-sysctl -w vm.page-cluster=1
-sysctl -w vm.extfrag_threshold=500
-sysctl -w vm.watermark_scale_factor=10
-sysctl -w stat_interval=1200
+sysctl -w vm.page-cluster=2
+#sysctl -w vm.extfrag_threshold=500
+#sysctl -w vm.watermark_scale_factor=10
+#sysctl -w stat_interval=1200
 sysctl -w vm.panic_on_oom=0
+
+
 
 # =========
 # Entropy 
@@ -504,7 +517,7 @@ sysctl -w vm.panic_on_oom=0
 sysctl -w kernel.random.read_wakeup_threshold=64
 sysctl -w kernel.random.write_wakeup_threshold=128
 
-logdata "#  Virtual Memory Tweaks = Activated" 
+logdata "#  Virtual Memory Tuning .. DONE" 
 
 sync;
 
@@ -577,7 +590,24 @@ fi
 	done
 
     if [ -d "/dev/stune" ]; then
+    if [ $PROFILE -eq 1 ];then
+	write /dev/stune/top-app/schedtune.boost 3
+
+	if [ -d "/dev/cpuset" ]; then
+	echo "Configuring cpuset" >> $DLL
+	echo 0 > /dev/cpuset/background/cpus
+	echo 1 > /dev/cpuset/system-background/cpus
+    fi
+	else
+	
 	write /dev/stune/top-app/schedtune.boost 1
+
+	if [ -d "/dev/cpuset" ]; then
+	echo "Configuring cpuset" >> $DLL
+	echo 0 > /dev/cpuset/background/cpus
+	echo 0-1 > /dev/cpuset/system-background/cpus
+    fi
+	fi
 	write /dev/stune/background/schedtune.boost 0
 	write /dev/stune/foreground/schedtune.boost 0
 	write /dev/stune/schedtune.prefer_idle 0
@@ -599,13 +629,13 @@ fi
 		write /proc/sys/kernel/sched_boost 0
 	fi
 	fi
-	
+
 	string1=/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors;
 	string2=/sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_available_governors;
 
 	if grep -w 'schedutil' $string1 && grep -w 'schedutil' $string2; then
 		
-	logdata "#  EAS Kernel Detected : Tuning 'schedutil'" 
+	logdata "#  EAS Kernel Detected .. Tuning 'schedutil'" 
     if [ -e $SVD ] && [ -e $GLD ]; then
 
 
@@ -613,65 +643,10 @@ fi
 	set_value "schedutil" $SVD/scaling_governor 
 	set_value "schedutil" $GLD/scaling_governor
 	
-    case "$SOC" in
-     "sdm845")
-
-	set_value 480000 $GOV_PATH_L/scaling_min_freq
-	set_value 1 /sys/devices/system/cpu/cpu4/online
-	set_value 480000 $GOV_PATH_B/scaling_min_freq
-
-	set_value 90 /proc/sys/kernel/sched_spill_load
-	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
-
-	# avoid permission problem, do not set 0444
-	set_value 2-3 /dev/cpuset/background/cpus
-	set_value 0-3 /dev/cpuset/system-background/cpus
-	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
-	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
-
-	# set_value 85 /proc/sys/kernel/sched_downmigrate
-	# set_value 95 /proc/sys/kernel/sched_upmigrate
-
-	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value 0 /sys/module/msm_performance/parameters/touchboost
-
-
-        if [ $PROFILE -eq 1 ];then
-
-	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    if [ $PROFILE -eq 1 ];then
 	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
-	set_param_eas cpu0 hispeed_freq 1280000
-	set_param_eas cpu0 hispeed_load 90
-	set_param_eas cpu0 pl 0
-	set_param_eas cpu$bcores hispeed_freq 1280000
-	set_param_eas cpu$bcores hispeed_load 90
-	set_param_eas cpu$bcores pl 0
-	else
-
-	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
-
-	set_param_eas cpu0 hispeed_freq 1180000
-	set_param_eas cpu0 hispeed_load 90
-	set_param_eas cpu0 pl 0
-	set_param_eas cpu0 timer_rate 20000
-	set_param_eas cpu$bcores timer_rate 20000
-	set_param_eas cpu$bcores hispeed_freq 1080000
-	set_param_eas cpu$bcores hispeed_load 90
-	set_param_eas cpu$bcores pl 0
-
-	fi
-    ;;
-    *)
-
-    if [ $PROFILE -eq 1 ];then
-	
     if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
 		write /proc/sys/kernel/sched_use_walt_task_util 1
 		write /proc/sys/kernel/sched_use_walt_cpu_util 1
@@ -713,12 +688,16 @@ fi
 	if [ -e "/sys/module/msm_performance/parameters/touchboost/sched_boost_on_input" ]; then
 		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
 	fi
+
 	else
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
     if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
-		write /proc/sys/kernel/sched_use_walt_task_util 0
-		write /proc/sys/kernel/sched_use_walt_cpu_util 0
+		write /proc/sys/kernel/sched_use_walt_task_util 1
+		write /proc/sys/kernel/sched_use_walt_cpu_util 1
 		write /proc/sys/kernel/sched_walt_init_task_load_pct 0
-		write /proc/sys/kernel/sched_walt_cpu_high_irqload 0
+		write /proc/sys/kernel/sched_walt_cpu_high_irqload 10000000
 		write /proc/sys/kernel/sched_rt_runtime_us 980000
 	fi
 	
@@ -757,14 +736,111 @@ fi
 		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
 	fi
     fi
-        esac
+        
+    case "$SOC" in
+     "sdm845")
+
+	set_value 480000 $GOV_PATH_L/scaling_min_freq
+	set_value 1 /sys/devices/system/cpu/cpu4/online
+	set_value 480000 $GOV_PATH_B/scaling_min_freq
+
+	set_value 90 /proc/sys/kernel/sched_spill_load
+	set_value 0 /proc/sys/kernel/sched_boost
+	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+	set_value 85 /proc/sys/kernel/sched_downmigrate
+	set_value 95 /proc/sys/kernel/sched_upmigrate
+	set_value 2000000 /proc/sys/kernel/sched_freq_inc_notify
+	set_value 1000000 /proc/sys/kernel/sched_freq_dec_notify
+
+	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+
+        if [ $PROFILE -eq 1 ];then
+
+	set_value "4:2480000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1180000
+	set_param_eas cpu0 hispeed_load 95
+	set_param_eas cpu0 pl 1
+	set_param_eas cpu$bcores hispeed_freq 1180000
+	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores pl 1
+	else
+
+	set_value "4:1980000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 0 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1080000
+	set_param_eas cpu0 hispeed_load 97
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu0 timer_rate 20000
+	set_param_eas cpu$bcores timer_rate 20000
+	set_param_eas cpu$bcores hispeed_freq 980000
+	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores pl 0
+
+	fi
+    ;;
+
+    "msm8998" | "apq8098_latv")
+
+	set_value 480000 $GOV_PATH_L/scaling_min_freq
+	set_value 1 /sys/devices/system/cpu/cpu4/online
+	set_value 480000 $GOV_PATH_B/scaling_min_freq
+
+	set_value 90 /proc/sys/kernel/sched_spill_load
+	set_value 0 /proc/sys/kernel/sched_boost
+	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+	set_value 85 /proc/sys/kernel/sched_downmigrate
+	set_value 95 /proc/sys/kernel/sched_upmigrate
+	set_value 2000000 /proc/sys/kernel/sched_freq_inc_notify
+	set_value 1000000 /proc/sys/kernel/sched_freq_dec_notify
+
+	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+	if [ $PROFILE -eq 1 ];then
+	set_value "4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1180000
+	set_param_eas cpu0 hispeed_load 95
+	set_param_eas cpu0 pl 1
+	set_param_eas cpu$bcores hispeed_freq 1180000
+	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores pl 1
+
+	else
+	set_value "4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value 0 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+
+	set_param_eas cpu0 hispeed_freq 1080000
+	set_param_eas cpu0 hispeed_load 97
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu$bcores hispeed_freq 980000
+	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores pl 0
+	
+	fi
+
+esac
 
         after_modify_eas
 	fi
 	
-	elif grep -w 'sched' $string1 && grep -w 'sched' $string2; then		
+	elif grep -w 'sched' $string1 && grep -w 'sched' $string2; then
 		
-	logdata "#  EAS Kernel Detected : Tuning 'sched'" 
+	logdata "#  EAS Kernel Detected .. Tuning 'sched'" 
 
 	set_value "sched" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	set_value "sched" /sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_governor
@@ -783,7 +859,7 @@ fi
 	#if grep -w 'interactive' $string1; then
     if [ -e $string1 ] && [ -e $string2 ]; then
 	
-	logdata "#  HMP Kernel Detected : Tuning 'Interactive'" 
+	logdata "#  HMP Kernel Detected .. Tuning 'Interactive'" 
 
 	set_value "interactive" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	set_value "interactive" /sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_governor
@@ -1076,7 +1152,7 @@ fi
 	if [ "$SOC" = "moorefield" ] || [ "$SOC" = "msm8939" ] || [ "$SOC" = "msm8939v2" ]; then 
 	echo "Intel chip detected"
 	else
-	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
+	logdata "# *ERROR* Governor tweaks failed .. Unrecognized chip : $SOC" 
 	fi
 	
     ;;
@@ -1392,7 +1468,7 @@ fi
 	if [ "$SOC" = "moorefield" ] || [ "$SOC" = "msm8939" ] || [ "$SOC" = "msm8939v2" ]; then 
 	echo "Intel chip detected"
 	else
-	logdata "# *ERROR* Governor tweaks failed - Unrecognized chip : $SOC" 
+	logdata "# *ERROR* Governor tweaks failed .. Unrecognized chip : $SOC" 
 	fi
 		
     ;;
@@ -1515,7 +1591,7 @@ write /proc/sys/kernel/sched_freq_inc_notify 3000000
 #fi
 
 	else
-	logdata "# *ERROR* Governor tweaks failed - Unsupported governor: $govn" 
+	logdata "# *ERROR* Governor tweaks failed .. Unsupported governor '$govn'" 
 
 	fi
 	fi
@@ -1526,7 +1602,7 @@ write /proc/sys/kernel/sched_freq_inc_notify 3000000
         # Enable power efficient work_queue mode
 	if [ -e /sys/module/workqueue/parameters/power_efficient ]; then
 	set_value "Y" /sys/module/workqueue/parameters/power_efficient 
-	logdata "#  Power efficient work_queue mode = Activated" 
+	logdata "# Enabling power efficient work_queue mode .. DONE" 
 	else
 	logdata "# *WARNING* Your kernel doesn't support power efficient work_queue mode" 
 	fi
@@ -1550,7 +1626,7 @@ CPU_tuning
 # GPU Tweaks
 # =========
 
- logdata "#  Governor Tweaks = Activated" 
+ logdata "#  Governor Tuning  .. DONE" 
 
  # set GPU default power level to 6 instead of 4 or 5
  # set_value /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
@@ -1558,7 +1634,7 @@ CPU_tuning
  if [ -e "/sys/module/adreno_idler" ]; then
 	write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
 	write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload "8000"
- logdata "# Adreno Idler (GPU) = Activated" 
+ logdata "# Enabling Adreno Idler (GPU) .. DONE" 
  else
  logdata "#  *WARNING* Your Kernel does not support Adreno Idler" 
  fi
@@ -1573,41 +1649,42 @@ RAM_tuning
 # REDUCE DEBUGGING
 # =========
 
-write /sys/module/binder/parameters/debug_mask "0"
-write /sys/module/bluetooth/parameters/disable_ertm "Y"
-write /sys/module/bluetooth/parameters/disable_esco "Y"
-write /sys/module/debug/parameters/enable_event_log "0"
-write /sys/module/dwc3/parameters/ep_addr_rxdbg_mask "0" 
-write /sys/module/dwc3/parameters/ep_addr_txdbg_mask "0"
-write /sys/module/edac_core/parameters/edac_mc_log_ce "0"
-write /sys/module/edac_core/parameters/edac_mc_log_ue "0"
-write /sys/module/glink/parameters/debug_mask"0"
-write /sys/module/hid_apple/parameters/fnmode"0"
-write /sys/module/hid_magicmouse/parameters/emulate_3button "N"
-write /sys/module/hid_magicmouse/parameters/emulate_scroll_wheel "N"
-write /sys/module/ip6_tunnel/parameters/log_ecn_error "N"
-write /sys/module/lowmemorykiller/parameters/debug_level "0"
-write /sys/module/mdss_fb/parameters/backlight_dimmer  "N"
-write /sys/module/msm_show_resume_irq/parameters/debug_mask "0"
-write /sys/module/msm_smd/parameters/debug_mask "0"
-write /sys/module/msm_smem/parameters/debug_mask "0" 
-write /sys/module/otg_wakelock/parameters/enabled "N" 
-write /sys/module/service_locator/parameters/enable "0" 
-write /sys/module/sit/parameters/log_ecn_error "N"
-write /sys/module/smem_log/parameters/log_enable "0"
-write /sys/module/smp2p/parameters/debug_mask "0"
-write /sys/module/sync/parameters/fsync_enabled "N"
-write /sys/module/touch_core_base/parameters/debug_mask "0"
-write /sys/module/usb_bam/parameters/enable_event_log "0"
+write "/sys/module/binder/parameters/debug_mask" "0"
+write "/sys/module/bluetooth/parameters/disable_ertm" "Y"
+write "/sys/module/bluetooth/parameters/disable_esco" "Y"
+write "/sys/module/debug/parameters/enable_event_log" "0"
+write "/sys/module/dwc3/parameters/ep_addr_rxdbg_mask" "0" 
+write "/sys/module/dwc3/parameters/ep_addr_txdbg_mask" "0"
+write "/sys/module/edac_core/parameters/edac_mc_log_ce" "0"
+write "/sys/module/edac_core/parameters/edac_mc_log_ue" "0"
+write "/sys/module/glink/parameters/debug_mask" "0"
+write "/sys/module/hid_apple/parameters/fnmode" "0"
+write "/sys/module/hid_magicmouse/parameters/emulate_3button" "N"
+write "/sys/module/hid_magicmouse/parameters/emulate_scroll_wheel" "N"
+write "/sys/module/ip6_tunnel/parameters/log_ecn_error" "N"
+write "/sys/module/lowmemorykiller/parameters/debug_level" "0"
+write "/sys/module/mdss_fb/parameters/backlight_dimmer " "N"
+write "/sys/module/msm_show_resume_irq/parameters/debug_mask" "0"
+write "/sys/module/msm_smd/parameters/debug_mask" "0"
+write "/sys/module/msm_smem/parameters/debug_mask" "0" 
+write "/sys/module/otg_wakelock/parameters/enabled" "N" 
+write "/sys/module/service_locator/parameters/enable" "0" 
+write "/sys/module/sit/parameters/log_ecn_error" "N"
+write "/sys/module/smem_log/parameters/log_enable" "0"
+write "/sys/module/smp2p/parameters/debug_mask" "0"
+write "/sys/module/sync/parameters/fsync_enabled" "N"
+write "/sys/module/touch_core_base/parameters/debug_mask" "0"
+write "/sys/module/usb_bam/parameters/enable_event_log" "0"
+write "/sys/module/printk/parameters/console_suspend" "Y"
 
-set_value 0 /sys/module/wakelock/parameters/debug_mask
-set_value 0 /sys/module/userwakelock/parameters/debug_mask
-set_value 0 /sys/module/earlysuspend/parameters/debug_mask
-set_value 0 /sys/module/alarm/parameters/debug_mask
-set_value 0 /sys/module/alarm_dev/parameters/debug_mask
-set_value 0 /sys/module/binder/parameters/debug_mask
-set_value 0 /sys/devices/system/edac/cpu/log_ce
-set_value 0 /sys/devices/system/edac/cpu/log_ue
+set_value 0 "/sys/module/wakelock/parameters/debug_mask"
+set_value 0 "/sys/module/userwakelock/parameters/debug_mask"
+set_value 0 "/sys/module/earlysuspend/parameters/debug_mask"
+set_value 0 "/sys/module/alarm/parameters/debug_mask"
+set_value 0 "/sys/module/alarm_dev/parameters/debug_mask"
+set_value 0 "/sys/module/binder/parameters/debug_mask"
+set_value 0 "/sys/devices/system/edac/cpu/log_ce"
+set_value 0 "/sys/devices/system/edac/cpu/log_ue"
 
 sysctl -w kernel.panic_on_oops=0
 sysctl -w kernel.panic=0
@@ -1620,7 +1697,7 @@ if [ -e /sys/module/logger/parameters/log_mode ]; then
  write /sys/module/logger/parameters/log_mode 2
 fi;
 
-logdata "#  Limit Logging & Debugging = Activated" 
+logdata "#  Limit Logging & Debugging .. DONE" 
 
 sleep 0.1
 
@@ -1661,7 +1738,7 @@ for k in /sys/block/sd*; do
 done
 
 
-logdata "#  I/O Tweaks = Activated" 
+logdata "#  Storage I/O Tuning  .. DONE" 
 
 # =========
 # TCP TWEAKS
@@ -1671,14 +1748,14 @@ algos=$(</proc/sys/net/ipv4/tcp_available_congestion_control);
 if [[ $algos == *"sociopath"* ]]
 then
 write /proc/sys/net/ipv4/tcp_congestion_control "sociopath"
-logdata "#  TCP : sociopath algorithm = Selected" 
+logdata "#  (TCP) Enabling sociopath algorithm  .. DONE" 
 elif [[ $algos == *"westwood"* ]]
 then
 write /proc/sys/net/ipv4/tcp_congestion_control "westwood"
-logdata "#  TCP : westwood algorithm = Selected" 
+logdata "#  (TCP) Enabling westwood algorithm .. DONE" 
 else
 write /proc/sys/net/ipv4/tcp_congestion_control "cubic"
-logdata "#  TCP : cubic algorithm = Selected" 
+logdata "#  (TCP) Enabling cubic algorithm .. DONE" 
 fi
 
 write /proc/sys/net/ipv4/tcp_ecn 2
@@ -1719,7 +1796,7 @@ write /sys/kernel/debug/sched_features NO_LB_MIN
 
 fi
 
-logdata "#  Misc Tweaks = Activated" 
+logdata "#  Enabling Misc Tweaks .. DONE" 
 
 # =========
 # Blocking Wakelocks
@@ -1727,7 +1804,7 @@ logdata "#  Misc Tweaks = Activated"
 
 if [ -e "/sys/class/misc/boeffla_wakelock_blocker/wakelock_blocker" ]; then
 write /sys/class/misc/boeffla_wakelock_blocker/wakelock_blocker "wlan_pno_wl;wlan_ipa;wcnss_filter_lock;[timerfd];hal_bluetooth_lock;IPA_WS;sensor_ind;wlan;netmgr_wl;qcom_rx_wakelock;wlan_wow_wl;wlan_extscan_wl;"
-logdata "#  Boeffla wake-locks blocker = Activated" 
+logdata "#  Enabling Boeffla wake-locks blocker .. DONE" 
 fi
 
 
@@ -1804,7 +1881,7 @@ fi
 if [ -e "/sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws" ]; then
 set_value N /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws
 fi
-logdata "#  Kernel Wake-locks Blocking = Activated" 
+logdata "# Enabling kernel Wake-locks Blocking .. DONE" 
 else
 logdata "# *WARNING* Your kernel doesn't support wake-lock Blocking" 
 fi
@@ -1850,13 +1927,13 @@ for f in $(find /data -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -na
 for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do rm $f; done
 
 
-logdata "#  Clean-up = Executed" 
+logdata "#  Clean-up .. DONE" 
 
 # FS-TRIM
 fstrim -v /cache
 fstrim -v /data
 fstrim -v /system
-logdata "#  FS-TRIM = Executed" 
+logdata "#  FS-TRIM .. DONE" 
 
 start perfd
 
