@@ -55,10 +55,12 @@ Google Pixel & EAS phones
 Please note that even if your device isn't listed some parameters may stil apply
 
 ## Changelog
-### v1.2.2 (08/12/2018)
-- Added SD845 EAS parameters
+
+### v1.2.2 (12/12/2018)
+- Added SD845 & SD835 EAS parameters
 - Added support to SD615/SD616
 - Updated hardware detection method with a better one
+- Memory enhancements for mid/low RAM devices
 - Added detailed battery health check
 - Other minor bug fixes & improvements
 
