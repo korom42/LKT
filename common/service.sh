@@ -365,16 +365,23 @@ function disable_lmk() {
 if [ -e "/sys/module/lowmemorykiller/parameters/enable_adaptive_lmk" ]; then
  set_value 0 /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
  set_value 0 /sys/module/process_reclaim/parameters/enable_process_reclaim
- setprop lmk.autocalc false
+    resetprop -n lmk.autocalc false
  else
  	logdata '# *WARNING* Adaptive LMK is not present on your Kernel' 
 fi;
 }
 
 function RAM_tuning() { 
+    
     calculator=3
+    if [ $PROFILE -eq 1 ];then
+    prof="0.75"
+    else
+    prof="0.65"
+    fi
+
     if [ $TOTAL_RAM -lt 2097152 ]; then
-    calculator="2.55"
+    calculator="2.70"
     disable_swap
     #disable_lmk
     resetprop -n ro.config.low_ram true
@@ -390,13 +397,13 @@ function RAM_tuning() {
     setprop ro.vendor.qti.am.reschedule_service true
       
     elif [ $TOTAL_RAM -lt 3145728 ]; then
-    calculator="2.77"
+    calculator="2.75"
     disable_swap
     #disable_lmk
     resetprop -n ro.sys.fw.bg_apps_limit 28
 	
     elif [ $TOTAL_RAM -lt 4194304 ]; then
-    calculator="2.88"
+    calculator="2.85"
     disable_swap
     #disable_lmk
     resetprop -n ro.sys.fw.bg_apps_limit 32
@@ -435,32 +442,20 @@ LMK=$(round ${f_LMK} 0)
 f_LMK1=$(awk -v x=$LMK -v y=$calculator 'BEGIN{print x*y*1024/4}') #Low Memory Killer 1
 LMK1=$(round ${f_LMK1} 0)
 
-f_LMK2=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.5}') #Low Memory Killer 2
+f_LMK2=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.25}') #Low Memory Killer 2
 LMK2=$(round ${f_LMK2} 0)
 
-f_LMK3=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.8}') #Low Memory Killer 3
+f_LMK3=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*1.75}') #Low Memory Killer 3
 LMK3=$(round ${f_LMK3} 0)
 
-f_LMK4=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*2.2}') #Low Memory Killer 4
+f_LMK4=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*2.25}') #Low Memory Killer 4
 LMK4=$(round ${f_LMK4} 0)
 
-f_LMK5=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*3.5}') #Low Memory Killer 5
+f_LMK5=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*3.33}') #Low Memory Killer 5
 LMK5=$(round ${f_LMK5} 0)
 
-f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*4.5}') #Low Memory Killer 6
+f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*4.25}') #Low Memory Killer 6
 LMK6=$(round ${f_LMK6} 0)
-
-ADJ1=0
-ADJ2=100
-ADJ3=200
-ADJ4=300
-ADJ5=900
-ADJ6=906
-
-#minfree="$LMK1,$LMK2,$LMK3,$LMK4,$LMK5,$LMK6"
-#ADJ="$ADJ1,$ADJ2,$ADJ3,$ADJ4,$ADJ5,$ADJ6"
-#wLMK=$(awk -v x=$minfree' BEGIN { print x >> "/sys/module/lowmemorykiller/parameters/minfree" }')
-#wADJ=$(awk -v x=$ADJ' BEGIN { print x >> "/sys/module/lowmemorykiller/parameters/adj" }')
 
 if [ -e "/sys/module/lowmemorykiller/parameters/enable_adaptive_lmk" ]; then
 	set_value 1 /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
@@ -470,12 +465,10 @@ fi
  
 if [ -e "/sys/module/lowmemorykiller/parameters/minfree" ]; then
    set_value "$LMK1,$LMK2,$LMK3,$LMK4,$LMK5,$LMK6" /sys/module/lowmemorykiller/parameters/minfree
-   set_value "$ADJ1,$ADJ2,$ADJ3,$ADJ4,$ADJ5,$ADJ6" /sys/module/lowmemorykiller/parameters/adj
    resetprop -n lmk.autocalc true
 else
 	logdata "#  *WARNING* LMK cannot currently be modified on your Kernel" 
 fi
-
 
 
 # =========
