@@ -1707,17 +1707,26 @@ sleep 0.1
 # I/O TWEAKS
 # =========
 
-sch=$(cat "/sys/block/mmcblk0/queue/scheduler");
+sch=$(</sys/block/mmcblk0/queue/scheduler);
 
+
+if [[ $sch == *"maple"* ]]
+then
+	set_io maple /sys/block/mmcblk0
+	set_io maple /sys/block/sda
+elif [[ $sch == *"row"* ]]
+then
+	set_io row /sys/block/mmcblk0
+	set_io row /sys/block/sda
+elif [[ $sch == *"zen"* ]]
+then
+	set_io zen /sys/block/mmcblk0
+	set_io zen /sys/block/sda
+else
 	set_io cfq /sys/block/mmcblk0
 	set_io cfq /sys/block/sda
+fi
 
-#for mmcblk in /sys/block/mmcblk0 ; do
-    write /sys/block/mmcblk0/queue/add_random "0"
-    write /sys/block/mmcblk0/queue/rotational "0"
-    write /sys/block/mmcblk0/queue/read_ahead_kb "128"
-    write /sys/block/mmcblk0/bdi/read_ahead_kb "128"
-#done
 
 for i in /sys/block/loop*; do
 	write $i/queue/add_random 0
@@ -1726,6 +1735,7 @@ for i in /sys/block/loop*; do
    	write $i/queue/rotational 0
    	write $i/queue/rq_affinity 1
 done
+
 for j in /sys/block/ram*; do
 	write $j/queue/add_random 0
 	write $j/queue/iostats 0
