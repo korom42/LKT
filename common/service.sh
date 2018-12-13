@@ -591,24 +591,20 @@ fi
 	
 	done
 
-    if [ -d "/dev/stune" ]; then
-    if [ $PROFILE -eq 1 ];then
-	write /dev/stune/top-app/schedtune.boost 3
+        write /sys/devices/system/cpu/online "0-$coresmax"
 
+	if [ -d "/dev/stune" ]; then
+	if [ $PROFILE -eq 1 ];then
+	write /dev/stune/top-app/schedtune.boost 8
 	if [ -d "/dev/cpuset" ]; then
-	echo "Configuring cpuset" >> $DLL
 	echo 0 > /dev/cpuset/background/cpus
 	echo 1 > /dev/cpuset/system-background/cpus
-    fi
+	fi
 	else
-	
-	write /dev/stune/top-app/schedtune.boost 1
-
 	if [ -d "/dev/cpuset" ]; then
-	echo "Configuring cpuset" >> $DLL
-	echo 0 > /dev/cpuset/background/cpus
+	echo 0-1 > /dev/cpuset/background/cpus
 	echo 0-1 > /dev/cpuset/system-background/cpus
-    fi
+	fi
 	fi
 	write /dev/stune/background/schedtune.boost 0
 	write /dev/stune/foreground/schedtune.boost 0
@@ -616,7 +612,7 @@ fi
 	write /proc/sys/kernel/sched_child_runs_first 0
 	#write /proc/sys/kernel/sched_cfs_boost 0
 	write /dev/stune/background/schedtune.prefer_idle 0
-	write /dev/stune/foreground/schedtune.prefer_idle 0
+	write /dev/stune/foreground/schedtune.prefer_idle 1
 	write /dev/stune/top-app/schedtune.prefer_idle 1
 	
 	if [ -e "/proc/sys/kernel/sched_autogroup_enabled" ]; then
@@ -742,49 +738,53 @@ fi
     case "$SOC" in
      "sdm845")
 
+
 	set_value 480000 $GOV_PATH_L/scaling_min_freq
 	set_value 1 /sys/devices/system/cpu/cpu4/online
 	set_value 480000 $GOV_PATH_B/scaling_min_freq
 
 	set_value 90 /proc/sys/kernel/sched_spill_load
-	set_value 0 /proc/sys/kernel/sched_boost
 	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	set_value 85 /proc/sys/kernel/sched_downmigrate
-	set_value 95 /proc/sys/kernel/sched_upmigrate
-	set_value 2000000 /proc/sys/kernel/sched_freq_inc_notify
-	set_value 1000000 /proc/sys/kernel/sched_freq_dec_notify
+	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
 
-	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	# avoid permission problem, do not set 0444
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 0-3 /dev/cpuset/system-background/cpus
+	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
+	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
+
+	# set_value 85 /proc/sys/kernel/sched_downmigrate
+	# set_value 95 /proc/sys/kernel/sched_upmigrate
+
+	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
 
 
         if [ $PROFILE -eq 1 ];then
 
-	set_value "4:2480000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "2:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
-	set_param_eas cpu0 hispeed_freq 1180000
-	set_param_eas cpu0 hispeed_load 95
-	set_param_eas cpu0 pl 1
-	set_param_eas cpu$bcores hispeed_freq 1180000
-	set_param_eas cpu$bcores hispeed_load 97
-	set_param_eas cpu$bcores pl 1
+	set_param_eas cpu0 hispeed_freq 1280000
+	set_param_eas cpu0 hispeed_load 90
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu$bcores hispeed_freq 1280000
+	set_param_eas cpu$bcores hispeed_load 90
+	set_param_eas cpu$bcores pl 0
 	else
 
-	set_value "4:1980000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
 	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 0 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
-	set_param_eas cpu0 hispeed_freq 1080000
-	set_param_eas cpu0 hispeed_load 97
+	set_param_eas cpu0 hispeed_freq 1180000
+	set_param_eas cpu0 hispeed_load 90
 	set_param_eas cpu0 pl 0
-	set_param_eas cpu0 timer_rate 20000
-	set_param_eas cpu$bcores timer_rate 20000
-	set_param_eas cpu$bcores hispeed_freq 980000
-	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores hispeed_freq 1080000
+	set_param_eas cpu$bcores hispeed_load 90
 	set_param_eas cpu$bcores pl 0
 
 	fi
@@ -797,40 +797,45 @@ fi
 	set_value 480000 $GOV_PATH_B/scaling_min_freq
 
 	set_value 90 /proc/sys/kernel/sched_spill_load
-	set_value 0 /proc/sys/kernel/sched_boost
 	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	set_value 85 /proc/sys/kernel/sched_downmigrate
-	set_value 95 /proc/sys/kernel/sched_upmigrate
-	set_value 2000000 /proc/sys/kernel/sched_freq_inc_notify
-	set_value 1000000 /proc/sys/kernel/sched_freq_dec_notify
+	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
 
-	set_value 50 /sys/module/cpu_boost/parameters/input_boost_ms
+	# avoid permission problem, do not set 0444
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 0-3 /dev/cpuset/system-background/cpus
+	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
+	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
+
+	# set_value 85 /proc/sys/kernel/sched_downmigrate
+	# set_value 95 /proc/sys/kernel/sched_upmigrate
+
+	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
 	set_value 0 /sys/module/msm_performance/parameters/touchboost
 
 	if [ $PROFILE -eq 1 ];then
-	set_value "4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
 	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
 	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
-	set_param_eas cpu0 hispeed_freq 1180000
-	set_param_eas cpu0 hispeed_load 95
-	set_param_eas cpu0 pl 1
-	set_param_eas cpu$bcores hispeed_freq 1180000
-	set_param_eas cpu$bcores hispeed_load 97
-	set_param_eas cpu$bcores pl 1
+	set_param_eas cpu0 hispeed_freq 1280000
+	set_param_eas cpu0 hispeed_load 90
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu$bcores hispeed_freq 1280000
+	set_param_eas cpu$bcores hispeed_load 90
+	set_param_eas cpu$bcores pl 0
 
 	else
-	set_value "4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
+	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
 	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 0 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
-	set_param_eas cpu0 hispeed_freq 1080000
-	set_param_eas cpu0 hispeed_load 97
+	set_param_eas cpu0 hispeed_freq 1180000
+	set_param_eas cpu0 hispeed_load 90
 	set_param_eas cpu0 pl 0
-	set_param_eas cpu$bcores hispeed_freq 980000
-	set_param_eas cpu$bcores hispeed_load 97
+	set_param_eas cpu$bcores hispeed_freq 1080000
+	set_param_eas cpu$bcores hispeed_load 90
 	set_param_eas cpu$bcores pl 0
 	
 	fi
