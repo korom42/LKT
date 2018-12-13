@@ -1775,28 +1775,40 @@ write /proc/sys/net/ipv4/tcp_window_scaling 1
 
 write /sys/KERNEL/FAST_CHARGE/force_fast_charge 1
 
-# Disable Gentle Fair Sleepers
+# Disable experimental features
 
-if [ -e /sys/kernel/debug/sched_features ]
-then
+strings=(
+NO_GENTLE_FAIR_SLEEPERS
+START_DEBIT
+NO_NEXT_BUDDY
+LAST_BUDDY
+CACHE_HOT_BUDDY
+WAKEUP_PREEMPTION
+NO_HRTICK
+NO_DOUBLE_TICK
+NO_LB_BIAS
+NO_NONTASK_CAPACITY
+NO_TTWU_QUEUE
+NO_SIS_AVG_CPU
+NO_RT_PUSH_IPI
+NO_FORCE_SD_OVERLAP
+NO_RT_RUNTIME_SHARE
+RT_RUNTIME_GREED 
+NO_LB_MIN
+ATTACH_AGE_LOAD
+ENERGY_AWARE
+NO_MIN_CAPACITY_CAPPING
+NO_FBT_STRICT_ORDER
+NO_EAS_USE_NEED_IDLE
+)
 
-write /sys/kernel/debug/sched_features NO_GENTLE_FAIR_SLEEPERS
-write /sys/kernel/debug/sched_features START_DEBIT
-write /sys/kernel/debug/sched_features NO_NEXT_BUDDY
-write /sys/kernel/debug/sched_features LAST_BUDDY
-write /sys/kernel/debug/sched_features CACHE_HOT_BUDDY
-write /sys/kernel/debug/sched_features WAKEUP_PREEMPTION
-write /sys/kernel/debug/sched_features ARCH_POWER
-write /sys/kernel/debug/sched_features NO_HRTICK
-write /sys/kernel/debug/sched_features NO_DOUBLE_TICK
-write /sys/kernel/debug/sched_features LB_BIAS
-write /sys/kernel/debug/sched_features NONTASK_POWER
-write /sys/kernel/debug/sched_features TTWU_QUEUE
-write /sys/kernel/debug/sched_features NO_FORCE_SD_OVERLAP
-write /sys/kernel/debug/sched_features RT_RUNTIME_SHARE
-write /sys/kernel/debug/sched_features NO_LB_MIN
 
-fi
+mount -t debugfs debugfs /sys/kernel/debug
+for i in "${strings[@]}"; do
+write /sys/kernel/debug/sched_features $i
+done
+umount /sys/kernel/debug
+
 
 logdata "#  Enabling Misc Tweaks .. DONE" 
 
