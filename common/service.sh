@@ -98,15 +98,16 @@ function set_io() {
 	if [ -f $2/queue/scheduler ]; then
 		if [ `grep -c $1 $2/queue/scheduler` = 1 ]; then
 			echo $1 > $2/queue/scheduler
-			echo 128 > $2/queue/read_ahead_kb
+			echo 2048 > $2/queue/read_ahead_kb
 			set_value 0 $2/queue/iostats
-			#set_value 128 $2/queue/nr_requests
-			#set_value 0 $2/queue/iosched/slice_idle
+			set_value 128 $2/queue/nr_requests
+			set_value 0 $2/queue/iosched/slice_idle
 			set_value 1 $2/queue/rq_affinity
 			set_value 1 $2/queue/nomerges
 			set_value 0 $2/queue/add_random
-			#set_value 0 $2/bdi/min_ratio
-			#set_value 100 $2/bdi/max_ratio
+			set_value 0 $2/queue/rotational
+			set_value 0 $2/bdi/min_ratio
+			set_value 100 $2/bdi/max_ratio
   		fi
 	fi
 }
