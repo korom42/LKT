@@ -383,7 +383,6 @@ function RAM_tuning() {
     if [ $TOTAL_RAM -lt 2097152 ]; then
     calculator="2.70"
     disable_swap
-    #disable_lmk
     resetprop -n ro.config.low_ram true
     resetprop -n ro.board_ram_size low
     
@@ -391,7 +390,7 @@ function RAM_tuning() {
     resetprop -n ro.vendor.qti.sys.fw.bservice_enable true
     resetprop -n ro.vendor.qti.sys.fw.bservice_limit 5
     resetprop -n ro.vendor.qti.sys.fw.bservice_age 5000
-    resetprop -n ro.sys.fw.bg_apps_limit 20
+    resetprop -n ro.sys.fw.bg_apps_limit 28
 
     #Enable Delay Service Restart
     setprop ro.vendor.qti.am.reschedule_service true
@@ -399,21 +398,26 @@ function RAM_tuning() {
     elif [ $TOTAL_RAM -lt 3145728 ]; then
     calculator="2.75"
     disable_swap
-    #disable_lmk
-    resetprop -n ro.sys.fw.bg_apps_limit 28
+    resetprop -n ro.sys.fw.bg_apps_limit 32
 	
     elif [ $TOTAL_RAM -lt 4194304 ]; then
     calculator="2.85"
     disable_swap
-    #disable_lmk
-    resetprop -n ro.sys.fw.bg_apps_limit 32
+    resetprop -n ro.sys.fw.bg_apps_limit 36
     fi
  
     if [ $TOTAL_RAM -gt 4194304 ]; then
+    calculator="3.45"
+    disable_swap
+    resetprop -n ro.sys.fw.bg_apps_limit 48
+
+    elif [ $TOTAL_RAM -gt 6291456 ]; then
+    calculator="4.65"
     disable_swap
     #disable_lmk
-    resetprop -n ro.sys.fw.bg_apps_limit 48
+    resetprop -n ro.sys.fw.bg_apps_limit 78
     fi
+
     resetprop -n sys.config.samp_spcm_enable false
     resetprop -n sys.config.samp_enable false
     resetprop -n ro.config.fha_enable true
@@ -434,6 +438,7 @@ var_three=$(awk -v x=$var_one -v y=$var_two -v z=$divisor 'BEGIN{print (x+y)/z}'
 var_four=$(awk -v x=$var_three -v p=3.14 'BEGIN{print x/(sqrt(p)*2)}')
 f_LMK=$(awk -v x=$var_four -v p=3.14 'BEGIN{print x/(p*2)}')
 LMK=$(round ${f_LMK} 0)
+
 
  # Low Memory Killer Generator
  # Settings inspired by HTC stock firmware 
@@ -456,6 +461,10 @@ LMK5=$(round ${f_LMK5} 0)
 
 f_LMK6=$(awk -v x=$LMK1 -v y=$calculator 'BEGIN{print x*4.25}') #Low Memory Killer 6
 LMK6=$(round ${f_LMK6} 0)
+
+LMK1=$((LMK1/2))
+LMK1=$(round ${LMK1} 0)
+
 
 if [ -e "/sys/module/lowmemorykiller/parameters/enable_adaptive_lmk" ]; then
 	set_value 1 /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
