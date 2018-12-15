@@ -1,11 +1,11 @@
 # LKT™ - Begin
 
 # Improve scrolling
-sys.use_fifo_ui=1
+#sys.use_fifo_ui=1
 persist.sys.scrollingcache=3
-windowsmgr.max_events_per_sec=150
-ro.max.fling_velocity=13800 
-ro.min.fling_velocity=10500
+#windowsmgr.max_events_per_sec=150
+#ro.max.fling_velocity=13800 
+#ro.min.fling_velocity=10500
 
 # Enable power saving mode
 power.saving.mode=1
