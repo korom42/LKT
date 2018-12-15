@@ -1656,14 +1656,14 @@ logdata "#  Storage I/O Tuning  .. DONE"
 # =========
 
 algos=$(</proc/sys/net/ipv4/tcp_available_congestion_control);
-if [[ $algos == *"sociopath"* ]]
-then
-write /proc/sys/net/ipv4/tcp_congestion_control "sociopath"
-logdata "#  (TCP) Enabling sociopath algorithm  .. DONE" 
-elif [[ $algos == *"westwood"* ]]
+if [[ $algos == *"westwood"* ]]
 then
 write /proc/sys/net/ipv4/tcp_congestion_control "westwood"
-logdata "#  (TCP) Enabling westwood algorithm .. DONE" 
+logdata "#  (TCP) Enabling westwood algorithm  .. DONE" 
+elif [[ $algos == *"reno"* ]]
+then
+write /proc/sys/net/ipv4/tcp_congestion_control "reno"
+logdata "#  (TCP) Enabling reno algorithm .. DONE" 
 else
 write /proc/sys/net/ipv4/tcp_congestion_control "cubic"
 logdata "#  (TCP) Enabling cubic algorithm .. DONE" 
@@ -1677,15 +1677,11 @@ write /proc/sys/net/ipv4/tcp_sack 1
 write /proc/sys/net/ipv4/tcp_window_scaling 1
 
 # Increase WI-FI scan delay
-sqlite=/system/xbin/sqlite3 wifi_idle_wait=36000 
+# sqlite=/system/xbin/sqlite3 wifi_idle_wait=36000 
 
 # =========
 # Minor Tweaks
 # =========
-
-# Enable fast USB charging
-
-write /sys/KERNEL/FAST_CHARGE/force_fast_charge 1
 
 # Disable experimental features
 

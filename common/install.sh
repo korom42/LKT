@@ -1,16 +1,6 @@
 UNSELECTED_MODE=-1
 PROFILE_MODE=$UNSELECTED_MODE
 
-$ZIP_FILE = $(basename $ZIP)
-case $ZIP_FILE in
-  *Battery*|*BATTERY*|*battery*)
-    PROFILE_MODE=0
-    ;;
-  *BALANC*|*Balanc*|*balanc*)
-    PROFILE_MODE=1
-    ;;
-esac
-
 # Keycheck binary by someone755 @Github, idea for code below by Zappo @xda-developers
 chmod 755 $INSTALLER/common/keycheck
 
@@ -88,9 +78,6 @@ if [ $PROFILE_MODE == $UNSELECTED_MODE ]; then
     ui_print "   Battery profile selected."
     ui_print " "
   fi
-else
-  ui_print "Profile mode specified in zip filename : $ZIP_FILE"
-  ui_print " "
 
 fi
 
