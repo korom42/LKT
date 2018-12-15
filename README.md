@@ -55,6 +55,8 @@ Google Pixel & EAS phones
 Please note that even if your device isn't listed some parameters may stil apply
 
 ## Changelog
+### v1.2.3 (15/12/2018)
+- Minor bug fixes
 
 ### v1.2.2 (14/12/2018)
 - EAS parameters enhacements
