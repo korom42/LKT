@@ -1,4 +1,4 @@
-<h1 align="center">LKT - Magisk :checkered_flag:</h1>
+<h1 align="center">LKT - Magisk 🏁</h1>
 
 <div align="center">
   <strong>legendary.kernel.tweaks</strong>
@@ -25,7 +25,6 @@ Compared to tuning the parameters manually, LKT adopts Project WIPE excellent op
 What you will need 
 
 ```
-• Android Gingerbread+
 • Magisk
 • Busybox
 ```
