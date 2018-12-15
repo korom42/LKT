@@ -594,61 +594,115 @@ fi
 	
 	done
 
-        write /sys/devices/system/cpu/online "0-$coresmax"
+	write /sys/devices/system/cpu/online "0-$coresmax"
 
 	if [ -d "/dev/stune" ]; then
-	if [ $PROFILE -eq 1 ];then
-	write /dev/stune/top-app/schedtune.boost 8
-	if [ -d "/dev/cpuset" ]; then
-	echo 0 > /dev/cpuset/background/cpus
-	echo 1 > /dev/cpuset/system-background/cpus
+	set_value 5 /dev/stune/foreground/schedtune.boost
+	set_value 25 /dev/stune/top-app/schedtune.boost
+	set_value 0 /dev/stune/system-background/schedtune.boost
+	set_value "-100" /dev/stune/schedtune.boost
+	set_value "-100" /dev/stune/background/schedtune.boost
+	set_value 0 /dev/stune/background/schedtune.boost
+	set_value 0 /dev/stune/foreground/schedtune.boost
+	set_value 0 /dev/stune/schedtune.prefer_idle
+	set_value 0 /dev/stune/background/schedtune.prefer_idle
+	set_value 0 /dev/stune/foreground/schedtune.prefer_idle
+	set_value 0 /dev/stune/top-app/schedtune.prefer_idle
+	set_value 0 /dev/stune/foreground/schedtune.prefer_idle
+	set_value 0 /dev/stune/top-app/schedtune.prefer_idle
+	set_value 1 $SVD/schedutil/iowait_boost_enable
+	set_value 1 $GLD/schedutil/iowait_boost_enable
+	set_value 500 $SVD/schedutil/up_rate_limit_us
+	set_value 8000 $SVD/schedutil/down_rate_limit_us
+	set_value 500 $GLD/schedutil/up_rate_limit_us
+	set_value 20000 $GLD/schedutil/down_rate_limit_us
 	fi
-	else
-	if [ -d "/dev/cpuset" ]; then
-	echo 0-1 > /dev/cpuset/background/cpus
-	echo 0-1 > /dev/cpuset/system-background/cpus
-	fi
-	fi
-	write /dev/stune/background/schedtune.boost 0
-	write /dev/stune/foreground/schedtune.boost 0
-	write /dev/stune/schedtune.prefer_idle 0
-	write /proc/sys/kernel/sched_child_runs_first 0
-	#write /proc/sys/kernel/sched_cfs_boost 0
-	write /dev/stune/background/schedtune.prefer_idle 0
-	write /dev/stune/foreground/schedtune.prefer_idle 1
-	write /dev/stune/top-app/schedtune.prefer_idle 1
 	
+	if [ -e "/proc/sys/kernel/sched_tunable_scaling" ]; then
+	set_value 2 /proc/sys/kernel/sched_tunable_scaling
+	fi
+	if [ -e "/proc/sys/kernel/sched_child_runs_first" ]; then
+	set_value 1 /proc/sys/kernel/sched_child_runs_first
+	fi
+	if [ -e "/proc/sys/kernel/sched_cfs_boost" ]; then
+	set_value 0 /proc/sys/kernel/sched_cfs_boost
+	fi
+	if [ -e "/proc/sys/kernel/sched_latency_ns" ]; then
+	set_value 100000 /proc/sys/kernel/sched_latency_ns
+	fi
 	if [ -e "/proc/sys/kernel/sched_autogroup_enabled" ]; then
-		write /proc/sys/kernel/sched_autogroup_enabled 0
+	set_value 0 /proc/sys/kernel/sched_autogroup_enabled
 	fi
-	
-	if [ -e "/proc/sys/kernel/sched_is_big_little" ]; then
-		write /proc/sys/kernel/sched_is_big_little 1
-	fi
-	
 	if [ -e "/proc/sys/kernel/sched_boost" ]; then
-		write /proc/sys/kernel/sched_boost 0
+	set_value 0 /proc/sys/kernel/sched_boost
 	fi
+	if [ -e "/proc/sys/kernel/sched_cstate_aware" ]; then
+	set_value 1 /proc/sys/kernel/sched_cstate_aware
+	fi
+	if [ -e "/proc/sys/kernel/sched_initial_task_util" ]; then
+	set_value 0 /proc/sys/kernel/sched_initial_task_util
+	fi
+	if [ -e "/sys/module/msm_performance/parameters/touchboost/sched_boost_on_input" ]; then
+	set_value N /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input
 	fi
 
+	set_value 90 /proc/sys/kernel/sched_spill_load
+	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
+	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
+
+	if [ $coresmax -eq 3 ];then
+	set_value 1 /dev/cpuset/background/cpus
+	set_value 0-1 /dev/cpuset/system-background/cpus
+	set_value 0-1,2-3 /dev/cpuset/foreground/cpus
+	set_value 0-1,2-3 /dev/cpuset/top-app/cpus
+	elif [ $coresmax -eq 5 ];then
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 0-3 /dev/cpuset/system-background/cpus
+	set_value 0-3,4-5 /dev/cpuset/foreground/cpus
+	set_value 0-3,4-5 /dev/cpuset/top-app/cpus
+	else
+	set_value 2-3 /dev/cpuset/background/cpus
+	set_value 0-3 /dev/cpuset/system-background/cpus
+	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
+	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
+        fi
+
+	# set_value 85 /proc/sys/kernel/sched_downmigrate
+	# set_value 95 /proc/sys/kernel/sched_upmigrate
+
+	set_value 0 /sys/module/msm_performance/parameters/touchboost
+
+	available_governors=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors`
 	string1=/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors;
 	string2=/sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_available_governors;
-
-	if grep -w 'schedutil' $string1 && grep -w 'schedutil' $string2; then
+	
+if [[ "$available_governors" == *"schedutil"* ]] || [[ "$available_governors" == *"sched"* ]]; then
 		
-	logdata "#  EAS Kernel Detected .. Tuning 'schedutil'" 
-    if [ -e $SVD ] && [ -e $GLD ]; then
+	logdata "#  EAS Kernel Detected .. Tuning $govn" 
+	if [ -e $SVD ] && [ -e $GLD ]; then
 
+	before_modify_eas
 
-        before_modify_eas
+	if grep -w "sched" $string1 && grep -w "sched" $string2; then
+	set_value "sched" $SVD/scaling_governor 
+	set_value "sched" $GLD/scaling_governor
+	else
 	set_value "schedutil" $SVD/scaling_governor 
 	set_value "schedutil" $GLD/scaling_governor
+	fi
 	
-    if [ $PROFILE -eq 1 ];then
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
+	if [ $PROFILE -eq 1 ];then
 
-    if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
+	set_value $(($bcores/2)) /sys/devices/system/cpu/cpu$bcores/core_ctl/min_cpus
+	set_value $bcores /sys/devices/system/cpu/cpu$bcores/core_ctl/max_cpus
+
+	if [ -e "/sys/module/cpu_boost" ]; then
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	fi
+
+	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
+	
+	if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
 		write /proc/sys/kernel/sched_use_walt_task_util 1
 		write /proc/sys/kernel/sched_use_walt_cpu_util 1
 		write /proc/sys/kernel/sched_walt_init_task_load_pct 10
@@ -656,132 +710,37 @@ fi
 		write /proc/sys/kernel/sched_rt_runtime_us 980000
 	fi
 
-	write $SVD/schedutil/up_rate_limit_us 1000
-	write $SVD/schedutil/down_rate_limit_us 8000
-	write $SVD/schedutil/iowait_boost_enable 0
-
 	write /sys/module/cpu_boost/parameters/dynamic_stune_boost 8
 	write /proc/sys/kernel/sched_nr_migrate 64
-	write /proc/sys/kernel/sched_cstate_aware 1
-	write /proc/sys/kernel/sched_initial_task_util 0
 
-	sleep 0.1
-	
-	write $GLD/schedutil/up_rate_limit_us 1000
-	write $GLD/schedutil/down_rate_limit_us 8000
-	write $GLD/schedutil/iowait_boost_enable 0
-
-	if [ -e "/sys/module/cpu_boost" ]; then
-	set_value 1 /sys/module/cpu_boost/parameters/input_boost_enabled
-    if [ $coresmax -eq 1 ];then
-    set_value "0:0 1:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 3 ];then
-    set_value "0:0 1:0 2:0 3:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 5 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 7 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 9 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    fi
-	set_value 600 /sys/module/cpu_boost/parameters/input_boost_ms
-	fi
-	if [ -e "/sys/module/msm_performance/parameters/touchboost/sched_boost_on_input" ]; then
-		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
-	fi
+	set_param_eas cpu0 hispeed_freq 1280000
+	set_param_eas cpu0 hispeed_load 90
+	set_param_eas cpu0 pl 0
+	set_param_eas cpu$bcores hispeed_freq 1280000
+	set_param_eas cpu$bcores hispeed_load 90
+	set_param_eas cpu$bcores pl 0
 
 	else
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
-
-    if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
+	
+	set_value 0 /sys/devices/system/cpu/cpu$bcores/core_ctl/min_cpus
+	set_value $bcores /sys/devices/system/cpu/cpu$bcores/core_ctl/max_cpus
+	
+	if [ -e "/sys/module/cpu_boost" ]; then
+	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	fi
+	
+	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
+		
+	if [ -e "/proc/sys/kernel/sched_use_walt_task_util" ]; then
 		write /proc/sys/kernel/sched_use_walt_task_util 1
 		write /proc/sys/kernel/sched_use_walt_cpu_util 1
 		write /proc/sys/kernel/sched_walt_init_task_load_pct 0
 		write /proc/sys/kernel/sched_walt_cpu_high_irqload 10000000
 		write /proc/sys/kernel/sched_rt_runtime_us 980000
 	fi
-	
-	write $SVD/schedutil/up_rate_limit_us 2000
-	write $SVD/schedutil/down_rate_limit_us 5000
-	write $SVD/schedutil/iowait_boost_enable 0
 
-	write /sys/module/cpu_boost/parameters/dynamic_stune_boost 6
+	write /sys/module/cpu_boost/parameters/dynamic_stune_boost 5
 	write /proc/sys/kernel/sched_nr_migrate 48
-	write /proc/sys/kernel/sched_cstate_aware 1
-	write /proc/sys/kernel/sched_initial_task_util 0
-
-	sleep 0.1
-	
-	write $GLD/schedutil/up_rate_limit_us 2000
-	write $GLD/schedutil/down_rate_limit_us 5000
-	write $GLD/schedutil/iowait_boost_enable 0
-	
-	if [ -e "/sys/module/cpu_boost" ]; then
-	set_value 1 /sys/module/cpu_boost/parameters/input_boost_enabled
-    if [ $coresmax -eq 1 ];then
-    set_value "0:0 1:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 3 ];then
-    set_value "0:0 1:0 2:0 3:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 5 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 7 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    elif [ $coresmax -eq 9 ];then
-    set_value "0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    fi
-	set_value 500 /sys/module/cpu_boost/parameters/input_boost_ms
-    fi
-	
-	if [ -e "/sys/module/msm_performance/parameters/touchboost/sched_boost_on_input" ]; then
-		write /sys/module/msm_performance/parameters/touchboost/sched_boost_on_input N
-	fi
-    fi
-        
-    case "$SOC" in
-     "sdm845")
-
-
-	set_value 480000 $GOV_PATH_L/scaling_min_freq
-	set_value 1 /sys/devices/system/cpu/cpu4/online
-	set_value 480000 $GOV_PATH_B/scaling_min_freq
-
-	set_value 90 /proc/sys/kernel/sched_spill_load
-	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
-
-	# avoid permission problem, do not set 0444
-	set_value 2-3 /dev/cpuset/background/cpus
-	set_value 0-3 /dev/cpuset/system-background/cpus
-	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
-	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
-
-	# set_value 85 /proc/sys/kernel/sched_downmigrate
-	# set_value 95 /proc/sys/kernel/sched_upmigrate
-
-	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value 0 /sys/module/msm_performance/parameters/touchboost
-
-
-        if [ $PROFILE -eq 1 ];then
-
-	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "2:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
-
-	set_param_eas cpu0 hispeed_freq 1280000
-	set_param_eas cpu0 hispeed_load 90
-	set_param_eas cpu0 pl 0
-	set_param_eas cpu$bcores hispeed_freq 1280000
-	set_param_eas cpu$bcores hispeed_load 90
-	set_param_eas cpu$bcores pl 0
-	else
-
-	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
 
 	set_param_eas cpu0 hispeed_freq 1180000
 	set_param_eas cpu0 hispeed_load 90
@@ -791,83 +750,14 @@ fi
 	set_param_eas cpu$bcores pl 0
 
 	fi
-    ;;
-
-    "msm8998" | "apq8098_latv")
-
-	set_value 480000 $GOV_PATH_L/scaling_min_freq
-	set_value 1 /sys/devices/system/cpu/cpu4/online
-	set_value 480000 $GOV_PATH_B/scaling_min_freq
-
-	set_value 90 /proc/sys/kernel/sched_spill_load
-	set_value 1 /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	set_value 3000000 /proc/sys/kernel/sched_freq_inc_notify
-
-	# avoid permission problem, do not set 0444
-	set_value 2-3 /dev/cpuset/background/cpus
-	set_value 0-3 /dev/cpuset/system-background/cpus
-	set_value 0-3,4-7 /dev/cpuset/foreground/cpus
-	set_value 0-3,4-7 /dev/cpuset/top-app/cpus
-
-	# set_value 85 /proc/sys/kernel/sched_downmigrate
-	# set_value 95 /proc/sys/kernel/sched_upmigrate
-
-	set_value 80 /sys/module/cpu_boost/parameters/input_boost_ms
-	set_value 0 /sys/module/msm_performance/parameters/touchboost
-
-	if [ $PROFILE -eq 1 ];then
-	set_value "0:1780000 4:2280000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 4 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
-
-	set_param_eas cpu0 hispeed_freq 1280000
-	set_param_eas cpu0 hispeed_load 90
-	set_param_eas cpu0 pl 0
-	set_param_eas cpu$bcores hispeed_freq 1280000
-	set_param_eas cpu$bcores hispeed_load 90
-	set_param_eas cpu$bcores pl 0
-
-	else
-	set_value "0:1680000 4:1880000" /sys/module/msm_performance/parameters/cpu_max_freq
-	set_value "0:1080000 4:0" /sys/module/cpu_boost/parameters/input_boost_freq
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
-	set_value 2 /sys/devices/system/cpu/cpu4/core_ctl/max_cpus
-
-	set_param_eas cpu0 hispeed_freq 1180000
-	set_param_eas cpu0 hispeed_load 90
-	set_param_eas cpu0 pl 0
-	set_param_eas cpu$bcores hispeed_freq 1080000
-	set_param_eas cpu$bcores hispeed_load 90
-	set_param_eas cpu$bcores pl 0
-	
-	fi
-
-esac
 
         after_modify_eas
-	fi
-	
-	elif grep -w 'sched' $string1 && grep -w 'sched' $string2; then
-		
-	logdata "#  EAS Kernel Detected .. Tuning 'sched'" 
 
-	set_value "sched" /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-	set_value "sched" /sys/devices/system/cpu/cpu$bcores/cpufreq/scaling_governor
-	
-    
-	if [ -e /dev/stune/foreground/schedtune.boost ]; then
-    if [ $PROFILE -eq 1 ];then
-
-	write /dev/stune/foreground/schedtune.boost 8
-	else
-    write /dev/stune/foreground/schedtune.boost 6
 	fi
-	fi;
 	
 	else
 	#if grep -w 'interactive' $string1; then
-    if [ -e $string1 ] && [ -e $string2 ]; then
+	if [ -e $string1 ] && [ -e $string2 ]; then
 	
 	logdata "#  HMP Kernel Detected .. Tuning 'Interactive'" 
 
@@ -1638,8 +1528,8 @@ CPU_tuning
 
  logdata "#  Governor Tuning  .. DONE" 
 
- # set GPU default power level to 6 instead of 4 or 5
- # set_value /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
+ set GPU default power level to 6 instead of 4 or 5
+ set_value /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
 	
  if [ -e "/sys/module/adreno_idler" ]; then
 	write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
