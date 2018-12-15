@@ -485,29 +485,30 @@ fi
 # =========
 
 chmod 0644 /proc/sys/*;
-sysctl -w vm.drop_caches=1
-sysctl -w vm.oom_dump_tasks=1
-sysctl -w vm.oom_kill_allocating_task=0
-sysctl -w vm.dirty_background_ratio=1
-sysctl -w vm.dirty_ratio=5
-sysctl -w vm.vfs_cache_pressure=30
-sysctl -w vm.overcommit_memory=50
-sysctl -w vm.overcommit_ratio=0
-sysctl -w vm.laptop_mode=0
-sysctl -w vm.block_dump=0
-sysctl -w vm.dirty_writeback_centisecs=0
-sysctl -w vm.dirty_expire_centisecs=0
-sysctl -w dir-notify-enable=0
-sysctl -w fs.lease-break-time=20
-sysctl -w fs.leases-enable=1
-sysctl -w vm.compact_memory=1
-sysctl -w vm.compact_unevictable_allowed=1
-sysctl -w vm.page-cluster=2
-#sysctl -w vm.extfrag_threshold=500
-#sysctl -w vm.watermark_scale_factor=10
-#sysctl -w stat_interval=1200
-sysctl -w vm.panic_on_oom=0
+sysctl -e -w  vm.drop_caches=1 \
+vm.oom_dump_tasks=1 \
+vm.oom_kill_allocating_task=0 \
+vm.dirty_background_ratio=1 \
+vm.dirty_ratio=5 \
+vm.vfs_cache_pressure=70 \
+vm.overcommit_memory=50 \
+vm.overcommit_ratio=0 \
+vm.laptop_mode=0 \
+vm.block_dump=0 \
+vm.dirty_writeback_centisecs=0 \
+vm.dirty_expire_centisecs=0 \
+dir-notify-enable=0 \
+fs.lease-break-time=20 \
+fs.leases-enable=1 \
+vm.compact_memory=1 \
+vm.compact_unevictable_allowed=1 \
+vm.page-cluster=0 \
+vm.panic_on_oom=0 &> /dev/null
+chmod 0444 /proc/sys/*;
 
+# Disable KSM to save CPU cycles
+
+set_value 1 /sys/kernel/mm/ksm/run
 
 
 # =========
@@ -615,7 +616,7 @@ fi
 	set_value 500 $SVD/schedutil/up_rate_limit_us
 	set_value 8000 $SVD/schedutil/down_rate_limit_us
 	set_value 500 $GLD/schedutil/up_rate_limit_us
-	set_value 20000 $GLD/schedutil/down_rate_limit_us
+	set_value 8000 $GLD/schedutil/down_rate_limit_us
 	fi
 	
 	if [ -e "/proc/sys/kernel/sched_tunable_scaling" ]; then
@@ -1533,7 +1534,7 @@ CPU_tuning
 	
  if [ -e "/sys/module/adreno_idler" ]; then
 	write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
-	write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload "8000"
+	write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload "10000"
  logdata "# Enabling Adreno Idler (GPU) .. DONE" 
  else
  logdata "#  *WARNING* Your Kernel does not support Adreno Idler" 
@@ -1674,6 +1675,9 @@ write /proc/sys/net/ipv4/tcp_low_latency 1
 write /proc/sys/net/ipv4/tcp_timestamps 1
 write /proc/sys/net/ipv4/tcp_sack 1
 write /proc/sys/net/ipv4/tcp_window_scaling 1
+
+# Increase WI-FI scan delay
+sqlite=/system/xbin/sqlite3 wifi_idle_wait=36000 
 
 # =========
 # Minor Tweaks
@@ -1844,17 +1848,19 @@ su -c "pm enable com.google.android.gsf/.update.SystemUpdateService$SecretCodeRe
 
 # Search all subdirectories
 
-for f in $(find /cache -name '*.apk' -or -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.txt' -or -name '*.0'); do rm $f; done
-for f in $(find /data -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do rm $f; done
-for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do rm $f; done
+for f in $(find /cache -name '*.apk' -or -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.txt' -or -name '*.0'); do sleep "0.001" && rm $f; done
+for f in $(find /data -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do sleep "0.001" && rm $f; done
+for f in $(find /sdcard -name '*.tmp' -or -name '*.temp' -or -name '*.log' -or -name '*.0'); do sleep "0.001" && rm $f; done
 
 
 logdata "#  Clean-up .. DONE" 
 
 # FS-TRIM
+
 fstrim -v /cache
 fstrim -v /data
 fstrim -v /system
+
 logdata "#  FS-TRIM .. DONE" 
 
 start perfd

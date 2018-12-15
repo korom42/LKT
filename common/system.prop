@@ -1,15 +1,29 @@
-#LKT™ - Begin
-ro.debuggable=1
-debug.atrace.tags.enableflags=0
+# LKT™ - Begin
+
+# Improve scrolling
+sys.use_fifo_ui=1
 persist.sys.scrollingcache=3
+windowsmgr.max_events_per_sec=150
+ro.max.fling_velocity=13800 
+ro.min.fling_velocity=10500
+
+# Enable power saving mode
 power.saving.mode=1
 ro.config.hw_power_saving=true
 persist.radio.add_power_save=1
+
+# Disable fast dormancy
 ro.fast.dormancy=0
 ro.config.hw_fast_dormancy=0
 ro.ril.fast.dormancy.rule=0
-ro.ril.disable.power.collapse=0 
-wifi.supplicant_scan_interval=180
+ro.ril.disable.power.collapse=0
+
+# Increase Wi-fi scanning interval
+wifi.supplicant_scan_interval=360
+
+# Disable stats logging & monitoring
+ro.debuggable=1
+debug.atrace.tags.enableflags=0
 profiler.force_disable_ulog=true
 profiler.force_disable_err_rpt=true
 profiler.force_disable_ulog=1
@@ -21,9 +35,9 @@ ro.com.google.networklocation=0
 profiler.debugmonitor=false
 profiler.launch=false
 profiler.hung.dumpdobugreport=false
-persist.sys.purgeable_assets=1
 persist.service.pcsync.enable=0
 persist.service.lgospd.enable=0
+persist.sys.purgeable_assets=1
 
 # Doze parameters
 pm.sleep_mode=1
@@ -45,4 +59,5 @@ debug.doze.component=0
 
 # Set default power mode to low power for encoder
 vidc.debug.perf.mode=2
-#LKT™ - End
+
+# LKT™ - End
