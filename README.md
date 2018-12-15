@@ -56,11 +56,14 @@ Please note that even if your device isn't listed some parameters may stil apply
 
 ## Changelog
 
-### v1.2.2 (10/12/2018)
-- Added SD845 & SD835 EAS parameters
+### v1.2.2 (14/12/2018)
+- EAS parameters enhacements
+- Memory tuning enhancements
 - Added support to SD615/SD616
-- Updated hardware detection method with a better one
-- Memory enhancements for mid/low RAM devices
+- Changed hardware detection method
+- I/O scheduler changes
+- Removed forced doze for GMS & ril services
+- Improved scrolling & FPS in applications
 - Added detailed battery health check
 - Other minor bug fixes & improvements
 
@@ -91,11 +94,12 @@ You may screenshot & upload your logs to share them in case of having troubles
 ## Disclaimer
 LKT is an advanced tweaks collection that act on `kernel` level. If you don't know how it works then use it at your own risk. I won't be responsible for any damage or loss. Always have backups.
 
-## Authors
-
+## Credits
+### Author
 **Omar Koulache** - [korom42](https://github.com/korom42)
 
-## Credits
+### Thanks goes to these wonderful people
+103
 - ### [Project WIPE contributors](https://github.com/yc9559/cpufreq-interactive-opt/tree/master/project/20180603-2) 
 ```
 @yc9559 @cjybyjk
@@ -112,3 +116,11 @@ LKT is an advanced tweaks collection that act on `kernel` level. If you don't kn
 - ### [Magisk](https://github.com/topjohnwu/Magisk) by @topjohnwu
 
 See also the list of [contributors](https://github.com/korom42/LKT/contributors) who participated in this project.
+
+### References
+- https://www.kernel.org/doc/Documentation
+- https://developer.arm.com/open-source/energy-aware-scheduling
+- http://man7.org/linux/man-pages/man5/proc.5.html
+- https://developer.ibm.com/linuxonpower/docs/linux-on-power-low-latency-tuning/
+- https://doc.opensuse.org/documentation/leap/tuning/html/book.sle.tuning/cha.tuning.taskscheduler.html
+- https://access.redhat.com/solutions/177953
