@@ -1,3 +1,5 @@
+NEW REPO https://github.com/Magisk-Modules-Repo/legendary_kernel_tweaks
+
 <h1 align="center">LKT - Magisk 🏁</h1>
 
 <div align="center">
